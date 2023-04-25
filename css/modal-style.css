@@ -1,0 +1,55 @@
+/* Style for the modal button */
+.terms-btn {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  
+  /* Style for the modal */
+  .modal-header {
+    background-color: #007bff;
+    color: #fff;
+    border-bottom: none;
+  }
+  
+  .modal-title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+  
+  .modal-body {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+  
+  .modal-footer {
+    border-top: none;
+  }
+  
+  /* Style for the close button */
+  .close {
+    color: #000;
+    font-size: 28px;
+    font-weight: 700;
+    opacity: 1;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  @media (min-width: 768px) {
+    .modal-dialog {
+      max-width: 800px;
+      margin: 30px auto;
+    }
+  }
+  

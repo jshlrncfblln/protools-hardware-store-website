@@ -1,0 +1,155 @@
+* {
+box-sizing: border-box;
+}
+  
+body {
+margin: 0;
+padding: 0;
+font-family: Arial, sans-serif;
+}
+
+.container {
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+background-color: #f5f5f5;
+}
+    
+form {
+display: flex;
+flex-direction: column;
+}
+
+h3 {
+margin: 0 0 20px;
+text-align: center;
+color: #333;
+}
+
+.input-field {
+position: relative;
+margin-bottom: 30px;
+}
+  
+input {
+border: none;
+border-bottom: 2px solid #ff6600;
+outline: none;
+padding: 16px 0;
+font-size: 18px;
+width: 100%;
+}
+  
+input:focus {
+border-bottom: 2px solid #ff9900;
+}
+  
+input[type="submit"] {
+padding: 16px 32px;
+background-color: #ff9900;
+border: none;
+color: #fff;
+font-size: 18px;
+border-radius: 5px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+  
+input[type="submit"]:hover {
+  background-color: #f57c00;
+}  
+  
+.label-container {
+  position: relative;  
+}
+  
+label {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  font-size: 20px;
+  color: #999;
+  transition: all 0.2s ease;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+  
+input:focus ~ label, input:not(:placeholder-shown) ~ label {
+  font-size: 18px;
+  top: 0;
+  transform: translateY(-100%);
+  color: #ff9900;
+}
+.show-hide {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+  
+.show-hide::before,
+.show-hide::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 2px;
+  background-color: #333;
+  top: 50%;
+  transform: translateY(-50%);
+  }  
+.show-hide::before {
+  left: 7px;
+  transform: rotate(45deg) translateY(-50%);
+}
+  
+.show-hide::after {  
+  right: 7px;
+  transform: rotate(-45deg) translateY(-50%);
+}
+
+.forgot-password {
+text-align: right;
+margin-bottom: 20px;
+font-size: 15px;
+}
+
+a {
+color: #333;
+text-decoration: none;
+}
+
+button[type="submit"] {
+  background-color: #ff6600;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 15px 0;
+  transition: all 0.2s ease;
+}
+
+button[type="submit"]:hover {
+background-color: #ff9900;
+}
+
+.register-now {
+text-align: center;
+margin-top: 20px;
+font-size: 15px;
+}
+
+.register-now span {
+color: #999;
+margin-right: 5px;
+}  
+
+  
+  
