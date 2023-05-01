@@ -31,39 +31,68 @@ if(isset($_SESSION['user_id'])){
 <body>
    
 <?php include 'components/user_header.php'; ?>
-
+<br><br>
 <div class="container">
       <div class="form-container">
         <form action="" method="post">
           <h3>Project Calculator</h3>
-
-          <div class="input-field">
-          <label for="category">Project Category</label>
-            <select name="project-category" id="category">
+          <p>Let's calculate your project and see how much it cost it.</p>
+          <div class="form-group">
+          <label for="projectCategory">Project Category</label>
+            <select id="projectCategory" class="form-control">
               <option value="">Select Project Category</option>
               <option value="house">House Project</option>
               <option value="building">Building Project</option>
             </select>
           </div>
 
-          <div class="input-field">
-          <label for="type">Project Type</label>
-            <select name="project-type" id="type">
-              <option value="">Select Project Type</option>
-              <option value="bath">Bathroom</option>
-              <option value="pool">Swimming Pool</option>
-              <option value="kitchen">Kitchen</option>
-              <option value="room">Room</option>
+          <div class="form-group">
+          <label for="subCategory">Project Type</label>
+            <select id="subCategory" class="form-control">
+              <option value="" select="selected">Select Project Type</option>
             </select>
           </div>
-          <button type="submit" name="submit" id="submit">Calculate</button>
+          <button type="submit" name="calculate" id="calculate">CALCULATE</button>
         </form>
       </div>
 </div>
-
-
+<br>
 <?php include 'components/footer.php'; ?>
-
 <script src="js/script.js"></script>
+<script>
+  const projectTypeSelect = document.getElementById("projectCategory");
+  const subCategorySelect = document.getElementById("subCategory");
+
+  // Define the sub categories for each project type
+  const subCategories = {
+    house: ["Bathroom Renovation", "Kitchen Renovation", "Room Addition"],
+    building: ["Hotel", "Office Building", "Retail Space"]
+  };
+
+  // Event listener for when a project type is selected
+  projectTypeSelect.addEventListener("change", (event) => {
+    // Clear the sub category select options
+    subCategorySelect.innerHTML = "";
+    
+    // Get the selected project type value
+    const projectCategory = event.target.value;
+    
+    // Create a new option for each sub category
+    if (projectCategory) {
+      subCategories[projectCategory].forEach((subCategory) => {
+        const option = document.createElement("option");
+        option.value = subCategory;
+        option.text = subCategory;
+        subCategorySelect.add(option);
+      });
+      
+      // Show the sub category select
+      subCategorySelect.style.display = "block";
+    } else {
+      // Hide the sub category select if no project type is selected
+      subCategorySelect.style.display = "none";
+    }
+  });
+</script>
 </body>
 </html>

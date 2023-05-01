@@ -166,7 +166,6 @@ section{
    justify-content: space-between;
    position: relative;
 }
-
 .header .flex .logo{
    font-size: 2.5rem;
    color:var(--white);
@@ -597,15 +596,14 @@ section{
 
 .form-container form h3{
    font-size: 2.5rem;
-   margin: 0 0 20px;
    text-transform: uppercase;
    color:var(--black);
 }
 
 .form-container form p{
-   font-size: 2rem;
+   font-size: 1.5rem;
    color:var(--light-color);
-   margin:1.5rem 0;
+   margin:1.5rem;
 }
 
 .form-container form .box{
@@ -1012,7 +1010,7 @@ section{
       top:99%; left:0; right:0;
       border-top: var(--border);
       border-bottom: var(--border);
-      background-color: var(--white);
+      background-color: var(--light-color);
       transition: .2s linear;
       clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
    }
@@ -1025,7 +1023,7 @@ section{
       display: block;
       margin:2rem;
    }
-
+   
    .home-bg .home .slide .content{
       text-align: center;
    }
