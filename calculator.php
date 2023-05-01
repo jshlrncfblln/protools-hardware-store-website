@@ -37,6 +37,7 @@ if(isset($_SESSION['user_id'])){
         <form action="" method="post">
           <h3>Project Calculator</h3>
           <p>Let's calculate your project and see how much it cost it.</p>
+          <!-- main project category -->
           <div class="form-group">
           <label for="projectCategory">Project Category</label>
             <select id="projectCategory" class="form-control">
@@ -45,13 +46,14 @@ if(isset($_SESSION['user_id'])){
               <option value="building">Building Project</option>
             </select>
           </div>
-
+          <!-- Sub project category -->
           <div class="form-group">
           <label for="subCategory">Project Type</label>
             <select id="subCategory" class="form-control">
               <option value="" select="selected">Select Project Type</option>
             </select>
           </div>
+          <!-- Calculate Button -->
           <button type="submit" name="calculate" id="calculate">CALCULATE</button>
         </form>
       </div>
