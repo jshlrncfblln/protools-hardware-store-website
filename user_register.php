@@ -221,6 +221,7 @@ if(isset($_POST['submit'])){
             </span>
           </div>
           <!-- END PASSWORD FIELD -->
+          
           <!-- TERMS AND CONDITION -->
           <div class="terms-condition">
             <input type="checkbox" name="" id="terms-condition-checkbox"><span>I have read and agreed to the</span><a href="#"> Terms and Condition</a><span>.</span>
