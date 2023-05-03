@@ -59,6 +59,7 @@ if(isset($_SESSION['user_id'])){
       </div>
 </div>
 <br>
+<br>
 <?php include 'components/footer.php'; ?>
 <script src="js/script.js"></script>
 <script>
