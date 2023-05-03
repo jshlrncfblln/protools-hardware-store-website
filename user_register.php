@@ -221,10 +221,9 @@ if(isset($_POST['submit'])){
             </span>
           </div>
           <!-- END PASSWORD FIELD -->
-          <!-- terms -->
-          <div class="Terms">
-            <input type="checkbox" name="agree-terms" id="agree-terms" required>
-            <label for="agree-terms">I agree to the Terms and Condition of this store.</label>
+          <!-- TERMS AND CONDITION -->
+          <div class="terms-condition">
+            <input type="checkbox" name="" id="terms-condition-checkbox"><span>I have read and agreed to the</span><a href="#"> Terms and Condition</a><span>.</span>
           </div>
           <!-- Background overlay -->
           <div class="overlay" id="overlay" onclick="closePopup()"></div>
