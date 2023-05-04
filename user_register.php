@@ -224,7 +224,7 @@ if(isset($_POST['submit'])){
           
           <!-- TERMS AND CONDITION -->
           <div class="terms-condition">
-            <input type="checkbox" name="" id="terms-condition-checkbox"><span>I have read and agreed to the</span><a href="#"> Terms and Condition</a><span>.</span>
+            <input type="checkbox" name="" id="terms-condition-checkbox"><span>I have read and agreed to the</span><a href="#"> Terms and Condition none</a><span>.</span>
           </div>
           <!-- Background overlay -->
           <div class="overlay" id="overlay" onclick="closePopup()"></div>
