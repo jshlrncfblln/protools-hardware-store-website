@@ -141,15 +141,18 @@ color:#f57c00;
 text-decoration: none;
 }
 
-.terms-condition{
-  text-align: center;
-  margin-top: 20px;
-  font-size: 15px;
+.terms-condition span{
+  display: inline-block;
 }
 
-.terms-condition span{
-  color: #333;
+.terms-condition input[type="checkbox"]{
+  display: inline-block;
+  vertical-align: middle;
   margin-right: 5px;
+}
+
+input[type="checkbox" i]{
+  background-color: #ff6600;
 }
 
 .user-header, .footer {
