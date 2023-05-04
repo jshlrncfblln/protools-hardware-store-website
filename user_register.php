@@ -194,38 +194,38 @@ if(isset($_POST['submit'])){
           <br>
           <br>
           <div class="input-field">
+          <label for="fname">First Name</label>
             <input type="text" name="fname" id="fname" required>
-            <label for="fname">First Name</label>
           </div>
           <div class="input-field">
-            <input type="text" name="sname" id="sname" required>
             <label for="sname">Surname</label>
+            <input type="text" name="sname" id="sname" required>
           </div>
           <div class="input-field">
-            <input type="email" name="email" id="email" required>
             <label for="email">Email Address</label>
+            <input type="email" name="email" id="email" required>
           </div>
           <!-- PASSWORD FIELD -->
           <div class="input-field">
-            <input type="password" name="password" id="password" required>
             <label for="password">Password</label>
-            <span class="show-hide" onclick="showHidePassword('password', this.parentNode)">
-              <i class="fas fa-eye-slash"></i>
-            </span>
+            <input type="password" name="password" id="password" required>
           </div>
           <div class="input-field">
-            <input type="password" name="confirm-password" id="confirm-password" required>
             <label for="confirm-password">Confirm Password</label>
-            <span class="show-hide" onclick="showHidePassword('confirm-password', this.parentNode)">
-              <i class="fas fa-eye-slash"></i>
-            </span>
+            <input type="password" name="confirm-password" id="confirm-password" required>
           </div>
           <!-- END PASSWORD FIELD -->
-          
-          <!-- TERMS AND CONDITION -->
-          <div class="terms-condition">
-            <input type="checkbox" name="" id="terms-condition-checkbox"><span>I have read and agreed to the</span><a href="#"> Terms and Condition</a><span>.</span>
+
+          <!-- Checkbox for terms and conditions -->
+          <div class="checkbox-container">
+            <div class="checkbox">
+              <input type="checkbox" name="terms" id="terms" required>
+              <span class="checkmark"></span>
+            </div>
+            <label class="checkbox-label" for="terms">I agree to the <a href="#" onclick="showPopup()">Terms and Condition</a></label>
           </div>
+          <!-- End checkbox for terms and conditions -->
+                
           <!-- Background overlay -->
           <div class="overlay" id="overlay" onclick="closePopup()"></div>
 
@@ -265,7 +265,7 @@ if(isset($_POST['submit'])){
               <button id="next">Submit</button>
           </div>
             <button onclick="closePopup()">Close</button>
-          </div>          
+          </div>         
           <br>
           <button type="submit" name="submit" id="submit">Register</button>
           <div class="login-now">
@@ -284,7 +284,6 @@ if(isset($_POST['submit'])){
   <?php include 'components/footer.php'; ?>
 </div>
 <script src="js/script.js"></script>
-<script src="js/register.js"></script>
 <script src="js/script_captcha.js"></script>
 <script>
   function showPopup() {
