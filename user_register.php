@@ -208,11 +208,17 @@ if(isset($_POST['submit'])){
           <!-- PASSWORD FIELD -->
           <div class="input-field">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" required>
+            <div class="password-toggle">
+              <input type="password" name="password" id="password" required>
+              <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
+            </div>
           </div>
           <div class="input-field">
             <label for="confirm-password">Confirm Password</label>
-            <input type="password" name="confirm-password" id="confirm-password" required>
+            <div class="password-toggle">
+              <input type="password" name="confirm-password" id="confirm-password" required>
+              <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
+            </div>
           </div>
           <!-- END PASSWORD FIELD -->
 
@@ -292,8 +298,20 @@ if(isset($_POST['submit'])){
   }
 
   function closePopup() {
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("popup").style.display = "none";
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("popup").style.display = "none";
+    }
+    function togglePasswordVisibility(icon) {
+    var passwordField = icon.previousElementSibling;
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+    } else {
+      passwordField.type = 'password';
+      icon.classList.add('fa-eye-slash');
+      icon.classList.remove('fa-eye');
+    }
   }
 </script>
 </body>

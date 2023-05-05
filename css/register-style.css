@@ -282,3 +282,26 @@ canvas {
   background-color: #ff9900;
 }
 
+.password-toggle {
+  position: relative;
+}
+
+.password-toggle i {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  cursor: pointer;
+  transform: translateY(-50%);
+  color: var(--dark);
+  font-size: 14px;
+}
+
+.toggle-password:before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f06e";
+}
+
+.toggle-password.fa-eye:before {
+  content: "\f070";
+}
