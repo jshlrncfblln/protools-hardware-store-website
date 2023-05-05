@@ -212,18 +212,21 @@ button[type="submit"]:hover {
   line-height: 1.5;
 }
 
-/* Style for the close button */
-.popup button {
-  display: block;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  background-color: #4CAF50;
-  color: #fff;
+.popup button.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 30px;
+  color: red;
+  background: none;
   border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
   cursor: pointer;
 }
+
+.popup button.close:hover {
+  color: #000;
+}
+
 
 /* Show the popup when the overlay is clicked */
 .overlay.active, .popup.active {
@@ -253,11 +256,14 @@ canvas {
 }
 
 #reload-button {
-  position: absolute;
-  left: 310px;
   background-color: #f57c00;
   border: none;
   cursor: pointer;
+  margin-left: 10px; /* Add this to create space between the input and the reload button */
+  padding: 10px 20px; /* Add padding to create some space inside the button */
+  border-radius: 5px; /* Add border radius to make the corners round */
+  color: #fff; /* Set the text color to white */
+  font-size: 16px; /* Set the font size */
 }
 
 #user-input {
@@ -281,6 +287,20 @@ canvas {
 #next:hover,#reload-button:hover {
   background-color: #ff9900;
 }
+
+@media (min-width: 768px) {
+  /* Add a media query to change the layout on larger screens */
+  .captcha-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+  }
+  #reload-button {
+    margin-left: 20px;
+  }
+}
+
 
 .password-toggle {
   position: relative;

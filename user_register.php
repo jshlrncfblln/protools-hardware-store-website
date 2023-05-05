@@ -238,6 +238,7 @@ if(isset($_POST['submit'])){
           <!-- Pop-up window -->
           <div class="popup" id="popup">
             <div class="content">
+            <button class="close" onclick="closePopup()"><i class="fas fa-times"></i></button>
               <h2>Terms and Conditions</h2>
               1. Payment: You should clearly state the accepted methods of payment, the currency accepted, and the procedure for payment. You may also want to include details about any fees or taxes that may apply. <br>
               <br>
@@ -257,23 +258,24 @@ if(isset($_POST['submit'])){
               <br>
               9. Dispute resolution: You may want to include a section on dispute resolution that outlines the process for resolving any disputes that may arise between you and your customers. <br>
               <br>
-              10. Termination: Your terms and conditions should include a section that outlines the circumstances under which you may terminate the customer's account, such as for breach of the terms and conditions or fraudulent activity. <br>
-            </div>
-            <div class="captcha-container">
-              <div class="captcha-wrapper">
-                  <canvas id="canvas" width="300" height="100"></canvas>
-                  <br>
-                  <button id="reload-button">
-                      <i class="fa-solid fa-arrow-rotate-right"></i>
-                  </button>
-              </div>
-              <input type="text" id="user-input" placeholder="Enter the text in the image" />
-              <button id="next">Submit</button>
-          </div>
-            <button onclick="closePopup()">Close</button>
+              10. Termination: Your terms and conditions should include a section that outlines the circumstances under which you may terminate the customer's account, such as for breach of the terms and conditions or fraudulent activity. <br><br>
+              <br>
+            </div>    
           </div>         
           <br>
-          <button type="submit" name="submit" id="submit">Register</button>
+          <div class="input-field">
+            <input type="submit" value="Register" id="register-btn"disabled>
+          </div>
+          <div class="captcha-container">
+                <div class="captcha-wrapper">
+                  <canvas id="canvas" width="300" height="100"></canvas>
+                  <button id="reload-button">
+                    <i class="fa-solid fa-arrow-rotate-right"></i>
+                  </button>
+                </div>
+                <input type="text" id="user-input" placeholder="Enter the text in the image" />
+                <button id="next">Submit</button>
+          </div>
           <div class="login-now">
             <span>Already a Member? </span> <a href="user_login.php">Login now!</a>
           </div>
@@ -292,27 +294,77 @@ if(isset($_POST['submit'])){
 <script src="js/script.js"></script>
 <script src="js/script_captcha.js"></script>
 <script>
+  // Toggle password visibility
+  function togglePasswordVisibility(icon) {
+    var passwordField = icon.parentNode.querySelector('input[type="password"]');
+    if (passwordField.type === "password") {
+      passwordField.type = "text";
+      icon.classList.remove("fa-eye-slash");
+      icon.classList.add("fa-eye");
+    } else {
+      passwordField.type = "password";
+      icon.classList.remove("fa-eye");
+      icon.classList.add("fa-eye-slash");
+    }
+  }
+
+  // Display terms and conditions popup
   function showPopup() {
     document.getElementById("overlay").style.display = "block";
     document.getElementById("popup").style.display = "block";
   }
 
+  // Close terms and conditions popup
   function closePopup() {
-      document.getElementById("overlay").style.display = "none";
-      document.getElementById("popup").style.display = "none";
-    }
-    function togglePasswordVisibility(icon) {
-    var passwordField = icon.previousElementSibling;
-    if (passwordField.type === 'password') {
-      passwordField.type = 'text';
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
-    } else {
-      passwordField.type = 'password';
-      icon.classList.add('fa-eye-slash');
-      icon.classList.remove('fa-eye');
-    }
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("popup").style.display = "none";
   }
+
+  // Generate captcha
+  function generateCaptcha() {
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    var captchaLength = 6;
+    var captchaText = "";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (var i = 0; i < captchaLength; i++) {
+      var char = characters[Math.floor(Math.random() * characters.length)];
+      captchaText += char;
+      ctx.font = "50px Arial";
+      ctx.fillStyle = "#000000";
+      ctx.fillText(char, i * 50 + 20, 70);
+    }
+    return captchaText;
+  }
+
+  // Reload captcha
+  document.getElementById("reload-button").addEventListener("click", function() {
+    document.getElementById("user-input").value = "";
+    var captchaText = generateCaptcha();
+  });
+
+  // Validate captcha
+  document.getElementById("next").addEventListener("click", function() {
+    var userInput = document.getElementById("user-input").value;
+    var captchaText = document.getElementById("canvas").textContent;
+    if (userInput === captchaText) {
+      document.getElementById("terms").checked = true;
+      document.getElementById("terms").disabled = true;
+      document.getElementById("register-btn").disabled = false;
+    } else {
+      alert("Captcha incorrect. Please try again.");
+    }
+  });
+
+  // Disable register button if terms checkbox is unchecked
+  document.getElementById("terms").addEventListener("change", function() {
+    if (this.checked) {
+      document.getElementById("register-btn").disabled = false;
+    } else {
+      document.getElementById("register-btn").disabled = true;
+    }
+  });
 </script>
 </body>
 </html>
