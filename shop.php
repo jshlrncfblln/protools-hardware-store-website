@@ -70,19 +70,7 @@ include 'components/wishlist_cart.php';
    </div>
 
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
+<br><br>
 <?php include 'components/footer.php'; ?>
 
 <script src="js/script.js"></script>

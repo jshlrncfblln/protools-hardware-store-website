@@ -49,7 +49,6 @@ if (isset($_POST['submit'])) {
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
    <link rel="stylesheet" href="css/index-style.css">
-
 </head>
 <body>
    
@@ -73,7 +72,7 @@ if (isset($_POST['submit'])) {
             </div>
          </div>
          <div class="input-field">
-            <input type="submit" value="LOGIN" id="login-btn">
+            <input type="submit" value="LOGIN" id="login-btn" disabled>
          </div>
          <div class="register-now">
             <span>Not yet a Member? </span> <a href="user_register.php">Register now!</a>
@@ -99,6 +98,22 @@ if (isset($_POST['submit'])) {
          icon.classList.remove('fa-eye');
       }
    }
+   document.addEventListener("DOMContentLoaded", function() {
+      const emailField = document.getElementById("email");
+      const passwordField = document.getElementById("password");
+      const loginButton = document.getElementById("login-btn");
+
+      emailField.addEventListener("input", toggleLoginButton);
+      passwordField.addEventListener("input", toggleLoginButton);
+
+      function toggleLoginButton() {
+         if (emailField.value.trim() !== "" && passwordField.value.trim() !== "") {
+            loginButton.disabled = false;
+         } else {
+            loginButton.disabled = true;
+         }
+      }
+   });
 </script>
 
 </body>

@@ -49,24 +49,31 @@ input[type="password"] {
   width: 100%;
   padding: 10px;
   border: 1px solid var(--dark);
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 16px;
 }
 
-button[type="submit"] {
+input[type="submit"] {
   background-color: var(--brand-color);
   color: var(--light-color);
   padding: 10px 20px;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
   font-size: 16px;
   cursor: pointer;
   width: 100%;
 }
 
-button[type="submit"]:hover {
+input[type="submit"]:hover {
   background-color: var(--brand-light-color);
 }
+
+input[type="submit"]:disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+
 
 .register-now {
   text-align: center;
@@ -124,4 +131,33 @@ button[type="submit"]:hover {
 
 .toggle-password.fa-eye:before {
   content: "\f070";
+}
+
+@media (max-width: 360px) {
+  .container {
+    max-width: 320px;
+    padding: 10px;
+  }
+
+  form {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    font-size: 14px;
+  }
+
+  button[type="submit"] {
+    font-size: 14px;
+  }
+
+  .register-now {
+    font-size: 12px;
+  }
 }
