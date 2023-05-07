@@ -1,86 +1,94 @@
-* {
-box-sizing: border-box;
+:root{
+  --brand-color: #f57c00;
+  --brand-light-color: #ff9900;
+  --light-color: #f1f1f1;
+  --dark: #4C3D3D;
 }
-  
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-margin: 0;
-padding: 0;
-font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 .container {
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-background-color: #f5f5f5;
-}
-    
-form {
-display: flex;
-flex-direction: column;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
 }
 
-h3 {
-margin: 0 0 20px;
-text-align: center;
-color: #333;
+form {
+  background-color: var(--light-color);
+  padding: 20px;
+}
+
+h2 {
+  text-align: center;
+  margin-top: 0;
 }
 
 .input-field {
-position: relative;
-margin-bottom: 30px;
+  margin-bottom: 20px;
 }
-  
-input {
-border: none;
-border-bottom: 2px solid #ff6600;
-outline: none;
-padding: 16px 0;
-font-size: 18px;
-width: 100%;
-}
-  
-input:focus {
-border-bottom: 2px solid #ff9900;
-}
-  
-input[type="submit"] {
-padding: 16px 32px;
-background-color: #ff9900;
-border: none;
-color: #fff;
-font-size: 18px;
-border-radius: 5px;
-cursor: pointer;
-transition: background-color 0.3s ease;
-}
-  
-input[type="submit"]:hover {
-  background-color: #f57c00;
-}  
-  
-.label-container {
-  position: relative;  
-}
-  
+
 label {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  font-size: 20px;
-  color: #999;
-  transition: all 0.2s ease;
-  transform: translateY(-50%);
-  pointer-events: none;
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+  text-align: left;
+  font-size: 15px;
 }
-  
-input:focus ~ label, input:not(:placeholder-shown) ~ label {
-  font-size: 18px;
-  top: 0;
-  transform: translateY(-100%);
-  color: #ff9900;
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--dark);
+  border-radius: 5px;
+  font-size: 16px;
 }
+
+button[type="submit"] {
+  background-color: var(--brand-color);
+  color: var(--light-color);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--brand-light-color);
+}
+
+.register-now {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 15px;
+}
+
+.register-now a {
+  color: var(--brand-color);
+  text-decoration: none;
+}
+
+.register-now a:hover {
+  text-decoration: underline;
+  color: var(--brand-light-color);
+}
+
+.user-header, .footer {
+  position: relative;
+  z-index: 1;
+}
+
 .show-hide {
   position: absolute;
   top: 50%;
@@ -93,63 +101,27 @@ input:focus ~ label, input:not(:placeholder-shown) ~ label {
   outline: none;
   cursor: pointer;
 }
-  
-.show-hide::before,
-.show-hide::after {
-  content: "";
+
+.password-toggle {
+  position: relative;
+}
+
+.password-toggle i {
   position: absolute;
-  width: 16px;
-  height: 2px;
-  background-color: #333;
   top: 50%;
-  transform: translateY(-50%);
-  }  
-.show-hide::before {
-  left: 7px;
-  transform: rotate(45deg) translateY(-50%);
-}
-  
-.show-hide::after {  
-  right: 7px;
-  transform: rotate(-45deg) translateY(-50%);
-}
-
-.forgot-password {
-text-align: right;
-margin-bottom: 20px;
-font-size: 15px;
-}
-
-a {
-color: #333;
-text-decoration: none;
-}
-
-button[type="submit"] {
-  background-color: #ff6600;
-  color: #fff;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
+  right: 10px;
   cursor: pointer;
-  padding: 15px 0;
-  transition: all 0.2s ease;
+  transform: translateY(-50%);
+  color: var(--dark);
+  font-size: 14px;
 }
 
-button[type="submit"]:hover {
-background-color: #ff9900;
+.toggle-password:before {
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  content: "\f06e";
 }
 
-.register-now {
-text-align: center;
-margin-top: 20px;
-font-size: 15px;
+.toggle-password.fa-eye:before {
+  content: "\f070";
 }
-
-.register-now span {
-color: #999;
-margin-right: 5px;
-}  
-
-  
-  

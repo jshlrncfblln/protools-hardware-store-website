@@ -5,7 +5,7 @@ session_start();
 
 // Check if user is logged in, if not redirect to login page
 if(!isset($_SESSION['user_id'])){
-   header("location: login.php");
+   header("location: user_login.php");
    exit();
 }
 
@@ -19,7 +19,7 @@ $user_data = $select_user->fetch(PDO::FETCH_ASSOC);
 
 // Check if user has already verified their email
 if($user_data['email_verified'] == 1){
-   header("location: dashboard.php");
+   header("location: home.php");
    exit();
 }
 
@@ -37,7 +37,7 @@ if(isset($_GET['code']) && !empty($_GET['code'])){
         $update_user->execute([$user_id]);
 
         // Redirect to dashboard page
-        header("location: dashboard.php");
+        header("location: home.php");
         exit();
     }
 }

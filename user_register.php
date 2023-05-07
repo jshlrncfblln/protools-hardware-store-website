@@ -193,14 +193,17 @@ if(isset($_POST['submit'])){
           <h3>Register</h3>
           <br>
           <br>
+          <!-- FIRST NAME FIELD -->
           <div class="input-field">
-          <label for="fname">First Name</label>
+            <label for="fname">First Name</label>
             <input type="text" name="fname" id="fname" required>
           </div>
+          <!-- SURNAME FIELD -->
           <div class="input-field">
             <label for="sname">Surname</label>
             <input type="text" name="sname" id="sname" required>
           </div>
+          <!-- EMAIL FIELD -->
           <div class="input-field">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" required>
@@ -213,6 +216,7 @@ if(isset($_POST['submit'])){
               <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
             </div>
           </div>
+          <!-- CONFIRM PASSWORD FIELD -->
           <div class="input-field">
             <label for="confirm-password">Confirm Password</label>
             <div class="password-toggle">
@@ -220,8 +224,6 @@ if(isset($_POST['submit'])){
               <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
             </div>
           </div>
-          <!-- END PASSWORD FIELD -->
-
           <!-- Checkbox for terms and conditions -->
           <div class="checkbox-container">
             <div class="checkbox">
@@ -263,6 +265,7 @@ if(isset($_POST['submit'])){
             </div>    
           </div>         
           <br>
+          <!-- SUBMIT BUTTON -->
           <div class="input-field">
             <input type="submit" value="Register" id="register-btn"disabled>
           </div>
@@ -275,7 +278,7 @@ if(isset($_POST['submit'])){
                 </div>
                 <input type="text" id="user-input" placeholder="Enter the text in the image" />
                 <button id="next">Submit</button>
-          </div>
+              </div>
           <div class="login-now">
             <span>Already a Member? </span> <a href="user_login.php">Login now!</a>
           </div>
@@ -294,77 +297,76 @@ if(isset($_POST['submit'])){
 <script src="js/script.js"></script>
 <script src="js/script_captcha.js"></script>
 <script>
-  // Toggle password visibility
   function togglePasswordVisibility(icon) {
-    var passwordField = icon.parentNode.querySelector('input[type="password"]');
-    if (passwordField.type === "password") {
-      passwordField.type = "text";
-      icon.classList.remove("fa-eye-slash");
-      icon.classList.add("fa-eye");
+    var passwordField = icon.previousElementSibling;
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
     } else {
-      passwordField.type = "password";
-      icon.classList.remove("fa-eye");
-      icon.classList.add("fa-eye-slash");
+      passwordField.type = 'password';
+      icon.classList.add('fa-eye-slash');
+      icon.classList.remove('fa-eye');
     }
   }
 
-  // Display terms and conditions popup
-  function showPopup() {
-    document.getElementById("overlay").style.display = "block";
-    document.getElementById("popup").style.display = "block";
-  }
-
-  // Close terms and conditions popup
-  function closePopup() {
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("popup").style.display = "none";
-  }
-
-  // Generate captcha
-  function generateCaptcha() {
-    var canvas = document.getElementById("canvas");
-    var ctx = canvas.getContext("2d");
-    var characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    var captchaLength = 6;
-    var captchaText = "";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (var i = 0; i < captchaLength; i++) {
-      var char = characters[Math.floor(Math.random() * characters.length)];
-      captchaText += char;
-      ctx.font = "50px Arial";
-      ctx.fillStyle = "#000000";
-      ctx.fillText(char, i * 50 + 20, 70);
+    // Display terms and conditions popup
+    function showPopup() {
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("popup").style.display = "block";
     }
-    return captchaText;
-  }
 
-  // Reload captcha
-  document.getElementById("reload-button").addEventListener("click", function() {
-    document.getElementById("user-input").value = "";
-    var captchaText = generateCaptcha();
-  });
-
-  // Validate captcha
-  document.getElementById("next").addEventListener("click", function() {
-    var userInput = document.getElementById("user-input").value;
-    var captchaText = document.getElementById("canvas").textContent;
-    if (userInput === captchaText) {
-      document.getElementById("terms").checked = true;
-      document.getElementById("terms").disabled = true;
-      document.getElementById("register-btn").disabled = false;
-    } else {
-      alert("Captcha incorrect. Please try again.");
+    // Close terms and conditions popup
+    function closePopup() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("popup").style.display = "none";
     }
-  });
 
-  // Disable register button if terms checkbox is unchecked
-  document.getElementById("terms").addEventListener("change", function() {
-    if (this.checked) {
-      document.getElementById("register-btn").disabled = false;
-    } else {
-      document.getElementById("register-btn").disabled = true;
+    // Generate captcha
+    function generateCaptcha() {
+      var canvas = document.getElementById("canvas");
+      var ctx = canvas.getContext("2d");
+      var characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+      var captchaLength = 6;
+      var captchaText = "";
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < captchaLength; i++) {
+        var char = characters[Math.floor(Math.random() * characters.length)];
+        captchaText += char;
+        ctx.font = "50px Arial";
+        ctx.fillStyle = "#000000";
+        ctx.fillText(char, i * 50 + 20, 70);
+      }
+      return captchaText;
     }
-  });
+
+    // Reload captcha
+    document.getElementById("reload-button").addEventListener("click", function() {
+      document.getElementById("user-input").value = "";
+      var captchaText = generateCaptcha();
+    });
+
+    // Validate captcha
+    document.getElementById("next").addEventListener("click", function() {
+      var userInput = document.getElementById("user-input").value;
+      var captchaText = document.getElementById("canvas").textContent;
+      if (userInput === captchaText) {
+        document.getElementById("terms").checked = true;
+        document.getElementById("terms").disabled = true;
+        document.getElementById("register-btn").disabled = false;
+      } else {
+        alert("Captcha incorrect. Please try again.");
+      }
+    });
+
+    // Disable register button if terms checkbox is unchecked
+    document.getElementById("terms").addEventListener("change", function() {
+      if (this.checked) {
+        document.getElementById("register-btn").disabled = false;
+      } else {
+        document.getElementById("register-btn").disabled = true;
+      }
+    });
 </script>
 </body>
 </html>

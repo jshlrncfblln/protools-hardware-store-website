@@ -234,7 +234,7 @@ button[type="submit"]:hover {
 }
 
 .captcha-container {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   gap: 20px;
