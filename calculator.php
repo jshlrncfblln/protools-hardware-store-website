@@ -58,8 +58,7 @@ if(isset($_SESSION['user_id'])){
         </form>
       </div>
 </div>
-<br>
-<div class="result-container">
+<div class="result-container" style="display: none; ">
   <div class="result-form-container">
     <form action="">
       <div class="itemListResult" id="itemList"></div>
@@ -72,7 +71,6 @@ if(isset($_SESSION['user_id'])){
 <script>
   const projectTypeSelect = document.getElementById("projectCategory");
   const subCategorySelect = document.getElementById("subCategory");
-  const itemListDiv = document.getElementById("itemList");
   const calculateBtn = document.getElementById("calculate");
   const resultContainer = document.querySelector(".result-container");
 
@@ -92,12 +90,40 @@ if(isset($_SESSION['user_id'])){
 
   // Define the list of items for each sub category
   const subCategoryItems = {
-    "Bathroom Renovation": ["Tiles", "Sand", "Gravel", "Cement"],
-    "Kitchen Renovation": ["Countertops", "Cabinets", "Sink", "Faucet"],
-    "Room Addition": ["Lumber", "Drywall", "Insulation", "Paint"],
-    "Hotel": ["Concrete", "Steel", "Glass", "Furniture"],
-    "Office Building": ["Brick", "Aluminum", "Wood", "Computers"],
-    "Retail Space": ["Flooring", "Lighting", "Shelving", "Merchandise"]
+    "Bathroom Renovation": [
+      { name: "Hammer", price: 200, amount: 1 },
+      { name: "Screwdriver", price: 150, amount: 2 },
+      { name: "Power Drill", price: 3500, amount: 1 },
+      { name: "Level", price: 350, amount: 1 },
+      { name: "Measuring Tape", price: 200, amount: 1 },
+      { name: "Utility Knife", price: 150, amount: 1 },
+      { name: "Handsaw", price: 400, amount: 1 },
+      { name: "Tile Cutter", price: 1500, amount: 1 },
+      { name: "Caulk Gun", price: 150, amount: 1 },
+      { name: "Power Sander", price: 2500, amount: 1 },
+      { name: "Plumber's Wrench", price: 500, amount: 1 },
+      { name: "Pliers", price: 200, amount: 1 },
+      { name: "Wire Cutter", price: 200, amount: 1 },
+      { name: "Safety Glasses", price: 150, amount: 1 },
+      { name: "Dust Mask", price: 50, amount: 1 },
+      { name: "Stepladder", price: 1500, amount: 1 },
+      { name: "Drywall or Cement Board", price: 3000, amount: 2-3 },
+      { name: "Spackling Paste", price: 500, amount: 1-2 },
+      { name: "Sand Paper", price: 100, amount: 2-3 },
+      { name: "Paint and Primer", price: 4000, amount: 1-2 },
+      // Add more items with prices and amounts
+    ],
+    "Kitchen Renovation": [
+      { name: "Countertops", price: 199.99, amount: 1 },
+      { name: "Cabinets", price: 299.99, amount: 10 },
+      // Add more items with prices and amounts
+    ],
+    "Room Addition": [
+      { name: "Lumber", price: 49.99, amount: 20 },
+      { name: "Drywall", price: 12.99, amount: 30 },
+      // Add more items with prices and amounts
+    ],
+    // Add more subcategories with items
   };
 
   // Event listener for when a project type is selected
@@ -126,7 +152,7 @@ if(isset($_SESSION['user_id'])){
   });
 
   // Event listener for when the calculate button is clicked
-  document.getElementById("calculateBtn").addEventListener("click", (event) => {
+  calculateBtn.addEventListener("click", (event) => {
     event.preventDefault();
 
     const selectedSubCategory = subCategorySelect.value;
@@ -135,21 +161,30 @@ if(isset($_SESSION['user_id'])){
       const itemsList = subCategoryItems[selectedSubCategory];
 
       // Clear the previous items list
+      const itemListDiv = document.getElementById("itemList");
       itemListDiv.innerHTML = "";
 
       if (itemsList && itemsList.length > 0) {
         const heading = document.createElement("h2");
-        heading.textContent = "Items for " + selectedSubCategory;
+        heading.textContent = "Materials and Tools to Finish " + selectedSubCategory;
         itemListDiv.appendChild(heading);
 
         const itemList = document.createElement("ul");
+        let totalPrice = 0;
+
         itemsList.forEach((item) => {
           const listItem = document.createElement("li");
-          listItem.textContent = item;
+          listItem.textContent = `${item.name} - Amount: ${item.amount}, Price: ₱${item.price.toFixed(2)}`;
           itemList.appendChild(listItem);
+
+          totalPrice += item.price * item.amount;
         });
 
         itemListDiv.appendChild(itemList);
+
+        const totalPriceElement = document.createElement("p");
+        totalPriceElement.textContent = `Total Estimated Cost: ₱${totalPrice.toFixed(2)}`;
+        itemListDiv.appendChild(totalPriceElement);
       }
 
       // Show the items list
@@ -160,5 +195,7 @@ if(isset($_SESSION['user_id'])){
     }
   });
 </script>
+
+
 </body>
 </html>
