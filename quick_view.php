@@ -1,19 +1,13 @@
 <?php
-
 include 'components/connect.php';
-
 session_start();
-
 if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
 }else{
    $user_id = '';
 };
-
 include 'components/wishlist_cart.php';
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,19 +18,13 @@ include 'components/wishlist_cart.php';
    <link rel="shorcut icon" type="x-icon" href="images/protools-logo.png" sizes="16x16 32x32 48x48">
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
-
 </head>
 <body>
-   
 <?php include 'components/user_header.php'; ?>
-
 <section class="quick-view">
-
-   <h1 class="heading">quick view</h1>
-
+   <h1 class="heading">Quick View</h1>
    <?php
      $pid = $_GET['pid'];
      $select_products = $conn->prepare("SELECT * FROM `products` WHERE id = ?"); 
@@ -80,24 +68,8 @@ include 'components/wishlist_cart.php';
       echo '<p class="empty">no products added yet!</p>';
    }
    ?>
-
 </section>
-
-
-
-
-
-
-
-
-
-
-
-
-
 <?php include 'components/footer.php'; ?>
-
 <script src="js/script.js"></script>
-
 </body>
 </html>
