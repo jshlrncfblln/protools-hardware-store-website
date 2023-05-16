@@ -1,155 +1,154 @@
 <?php
+    // Import PHPMailer classes into the global namespace
+    // These must be at the top of your script, not inside a function
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\SMTP;
+    use PHPMailer\PHPMailer\Exception;
 
-require_once 'components/connect.php'; // includes the database connection
+    session_start();
+    if (isset($_SESSION['user_id'])) {
+        $user_id = $_SESSION['user_id'];
+    } else {
+        $user_id = '';
+    }
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+    // Load Composer's autoloader
+    require 'vendor/autoload.php';
 
-session_start(); // starts the session
+    include 'components/connect.php';
+    $msg = "";
 
-if(isset($_SESSION['user_id'])){
-   $user_id = $_SESSION['user_id'];
-}else{
-   $user_id = '';
-};
+    if (isset($_POST['submit'])) {
+        $fname = mysqli_real_escape_string($conn, $_POST['fname']);
+        $sname = mysqli_real_escape_string($conn, $_POST['sname']);
+        $email = mysqli_real_escape_string($conn, $_POST['email']);
+        $password = mysqli_real_escape_string($conn, md5($_POST['password']));
+        $cpassword = mysqli_real_escape_string($conn, md5($_POST['confirm-password']));
+        $otp = rand(100000, 999999); // Generate random 6-digit OTP code
 
-if(isset($_POST['submit'])){
+        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM users WHERE email='{$email}'")) > 0) {
+            $msg = "<div class='alert alert-danger'>{$email} - This Email Address has already been registered.</div>";
+        } else {
+            if ($password === $cpassword) {
+                $sql = "INSERT INTO users (fname, sname, email, password, otp) VALUES ('{$fname}', '{$sname}', '{$email}', '{$password}', '{$otp}')";
+                $result = mysqli_query($conn, $sql);
 
-   $fname = $_POST['fname'];
-   $fname = filter_var($fname, FILTER_SANITIZE_STRING);
+                if ($result) {
+                    echo "<div style='display: none;'>";
+                    // Create an instance; passing `true` enables exceptions
+                    $mail = new PHPMailer(true);
 
-   $sname = $_POST['sname'];
-   $sname = filter_var($sname, FILTER_SANITIZE_STRING);
+                    try {
+                        // Server settings
+                        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
+                        $mail->isSMTP();                                            // Send using SMTP
+                        $mail->Host       = 'smtp.gmail.com';                        // Set the SMTP server to send through
+                        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+                        $mail->Username   = 'joshua.laurence.fabi@gmail.com';         // SMTP username
+                        $mail->Password   = 'ziwbzzqguwnueqis';                       // SMTP password
+                        $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption
+                        $mail->Port       = 587;                                    // TCP port to connect to
 
-   $email = $_POST['email'];
-   $email = filter_var($email, FILTER_SANITIZE_STRING);
+                        // Recipients
+                        $mail->setFrom('joshua.laurence.fabi@gmail.com', 'Joshua Fabillon');
+                        $mail->addAddress($email, $fname.' '.$sname);
 
-   $password = sha1($_POST['password']);
-   $password = filter_var($password, FILTER_SANITIZE_STRING);
-
-   $cpassword = sha1($_POST['confirm-password']);
-   $cpassword = filter_var($cpassword, FILTER_SANITIZE_STRING);
-
-   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
-   $select_user->execute([$email,]);
-   $row = $select_user->fetch(PDO::FETCH_ASSOC);
-
-   if($select_user->rowCount() > 0){
-      $message[] = 'email already exists!';
-   }else{
-      if($password != $cpassword){
-         $message[] = 'confirm password not matched!';
-      }else{
-         $verification_code = md5(rand()); // generates a random verification code
-         $insert_user = $conn->prepare("INSERT INTO `users`(fname, sname, email, password, verification_code) VALUES(?,?,?,?,?)");
-         $insert_user->execute([$fname, $sname, $email, $cpassword, $verification_code]); // inserts the user data into the database
-         
-         // sends the verification email to the user
-         $mail = new PHPMailer(true);
-         try {
-            //Server settings
-            $mail->SMTPDebug = 0;                      
-            $mail->isSMTP();                                            
-            $mail->Host       = 'smtp.gmail.com';                    
-            $mail->SMTPAuth   = true;                                   
-            $mail->Username   = 'your-email@gmail.com';                    
-            $mail->Password   = 'your-email-password';                              
-            $mail->SMTPSecure = 'tls';         
-            $mail->Port       = 587;                                    
-         
-            //Recipients
-            $mail->setFrom('your-email@gmail.com', 'Your Name');
-            $mail->addAddress($email, $fname.' '.$sname);     
-         
-            // Set email content
-            $mail->isHTML(true);                                  
-            $mail->Subject = 'Email Verification';
-
-            // Email styles
-            $styles = "
-              /* Main styles */
-              body {
-                  font-family: Arial, sans-serif;
-                  color: #333333;
-              }
-              h1 {
-                  font-size: 24px;
-                  font-weight: bold;
-                  color: #333333;
-                  margin-top: 0;
-                  margin-bottom: 20px;
-              }
-              p {
-                  font-size: 16px;
-                  line-height: 1.5;
-                  margin-top: 0;
-                  margin-bottom: 20px;
-              }
-              a {
-                  color: #ffffff;
-                  background-color: #1a73e8;
-                  border-radius: 4px;
-                  display: inline-block;
-                  font-size: 16px;
-                  font-weight: bold;
-                  text-align: center;
-                  text-decoration: none;
-                  padding: 12px 24px;
-              }
-              a:hover {
-                  background-color: #0d47a1;
-              }
-              /* Responsive styles */
-              @media (max-width: 600px) {
-                  h1 {
-                    font-size: 20px;
-                  }
-                  p {
-                    font-size: 14px;
-                  }
-                  a {
-                    font-size: 14px;
-                    padding: 8px 16px;
-                  }
-              }
-            ";
-
-            // Email body
-            $body = '
-              <html>
-                  <head>
-                    <title>Email Verification</title>
-                  </head>
-                  <body>
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                        <tr>
-                          <td align="center">
-                              <table width="600" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                        // Email styles
+                        $styles = "
+                          /* Main styles */
+                          body {
+                              font-family: Arial, sans-serif;
+                              color: #333333;
+                          }
+                          h1 {
+                              font-size: 24px;
+                              font-weight: bold;
+                              color: #333333;
+                              margin-top: 0;
+                              margin-bottom: 20px;
+                          }
+                          p {
+                              font-size: 16px;
+                              line-height: 1.5;
+                              margin-top: 0;
+                              margin-bottom: 20px;
+                          }
+                          a {
+                              color: #ffffff;
+                              background-color: #1a73e8;
+                              border-radius: 4px;
+			                        display: inline-block;
+                              font-size: 16px;
+                              font-weight: bold;
+                              text-align: center;
+                              text-decoration: none;
+                              padding: 12px 24px;
+                            }
+                            a:hover {
+                              background-color: #0d47a1;
+                            }
+                            /* Responsive styles */
+                            @media (max-width: 600px) {
+                              h1 {
+                              font-size: 20px;
+                              }
+                              p {
+                              font-size: 14px;
+                              }
+                              a {
+                              font-size: 14px;
+                              padding: 8px 16px;
+                              }
+                            }
+                            ";
+                    // Email body
+                    $body = '
+                      <html>
+                          <head>
+                            <title>Email Verification</title>
+                          </head>
+                          <body>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                 <tr>
-                                    <td style="background-color: #ffffff; padding: 40px;">
-                                      <h1>Email Verification</h1>
-                                      <p>Please click the link below to verify your email address:</p>
-                                      <p><a href="http://your-website.com/verify.php?email='.$email.'&code='.$verification_code.'">Verify Email Address</a></p>
-                                    </td>
+                                  <td align="center">
+                                      <table width="600" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
+                                        <tr>
+                                            <td style="background-color: #ffffff; padding: 40px;">
+                                              <h1>Email Verification</h1>
+                                              <p>Please enter the OTP code below to verify your email address:</p>
+                                              <p><strong>'.$otp.'</strong></p>
+                                            </td>
+                                        </tr>
+                                      </table>
+                                  </td>
                                 </tr>
-                              </table>
-                          </td>
-                        </tr>
-                    </table>
-                    <style>'.$styles.'</style>
-                  </body>
-              </html>
-            ';
+                            </table>
+                            <style>'.$styles.'</style>
+                          </body>
+                      </html>
+                    ';
 
-            $mail->Body = $body;
-         
-            $mail->send();
-            $message[] = 'A verification email has been sent to your email address. Please click the link in the email to verify your email address and complete your registration.';
-         } catch (Exception $e) {
-            $message[] = 'Verification email could not be sent. Please try again later.';
-         }
-      }
-   }
+                    // Content
+                    $mail->isHTML(true);       // Set email format to HTML
+                    $mail->Subject = 'Email Verification (OTP) - No Reply';
+                    $mail->Body    = $body;
+
+                    $mail->send();
+                    echo 'Message has been sent';
+                    header("Location: otp_verification.php");
+                    exit();
+                } catch (Exception $e) {
+                    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                }
+                echo "</div>";
+                $msg = "<div class='alert alert-info'>We've sent an OTP code to your email address.</div>";
+            } else {
+                $msg = "<div class='alert alert-danger'>Something went wrong.</div>";
+            }
+        } else {
+            $msg = "<div class='alert alert-danger'>Password and Confirm Password do not match.</div>";
+        }
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -177,6 +176,55 @@ if(isset($_POST['submit'])){
       document.getElementById("popup").style.display = "none";
     }
 	</script>
+  <!-- Script for opening captcha popup -->
+  <script>
+    // Display captcha popup
+    function showCaptchaPopup() {
+      document.getElementById("overlay").style.display = "block";
+      document.getElementById("captcha-popup").style.display = "block";
+    }
+
+    // Close captcha popup
+    function closeCaptchaPopup() {
+      document.getElementById("overlay").style.display = "none";
+      document.getElementById("captcha-popup").style.display = "none";
+    }
+
+    // Validate captcha on form submission
+    document.querySelector("form").addEventListener("submit", function(event) {
+      if (!document.getElementById("terms").checked) {
+        event.preventDefault(); // Prevent form submission if terms are not agreed
+        alert("Please agree to the terms and conditions.");
+      } else if (!document.getElementById("captcha-submit").disabled) {
+        event.preventDefault(); // Prevent form submission if captcha is not completed
+        alert("Please complete the captcha.");
+      }
+    });
+
+    // Generate and display captcha popup
+    document.getElementById("register-btn").addEventListener("click", function(event) {
+      event.preventDefault(); // Prevent default button behavior
+      showCaptchaPopup();
+      generateCaptcha();
+    });
+
+    // Reload captcha
+    document.getElementById("reload-button").addEventListener("click", function() {
+      document.getElementById("user-input").value = "";
+      generateCaptcha();
+    });
+
+    // Validate captcha and enable submit button
+    document.getElementById("next").addEventListener("click", function() {
+      var userInput = document.getElementById("user-input").value;
+      var captchaText = document.getElementById("captcha-canvas").textContent;
+      if (userInput === captchaText) {
+        document.getElementById("captcha-submit").disabled = false;
+      } else {
+        alert("Captcha incorrect. Please try again.");
+      }
+    });
+  </script>
 </head>
 <body>
 <div class="user-header">

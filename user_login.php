@@ -5,7 +5,7 @@ if (isset($_SESSION['user_id'])) {
    $user_id = $_SESSION['user_id'];
 } else {
    $user_id = '';
-};
+}
 if (isset($_POST['submit'])) {
 
    $email = $_POST['email'];
@@ -23,14 +23,17 @@ if (isset($_POST['submit'])) {
          if ($row['password'] === $pass) {
             $_SESSION['user_id'] = $row['id'];
             header('location: home.php');
+            exit();
          } else {
-            $message[] = 'Incorrect username or password!';
+            $message = 'Incorrect username or password!';
          }
       } else {
-         $message[] = 'Please verify your email before logging in. Check your inbox for the verification email.';
+         // Email is not verified, redirect to otp_verification.php
+         header('location: otp_verification.php');
+         exit();
       }
    } else {
-      $message[] = 'Incorrect username or password!';
+      $message = 'Email is not registered!';
    }
 }
 ?>
@@ -41,7 +44,7 @@ if (isset($_POST['submit'])) {
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Login - ProTools</title>
-   <link rel="shorcut icon" type="x-icon" href="images/protools-logo.png" sizes="16x16 32x32 48x48">
+   <link rel="shortcut icon" type="x-icon" href="images/protools-logo.png" sizes="16x16 32x32 48x48">
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
    <!-- Custom font link -->
@@ -60,14 +63,17 @@ if (isset($_POST['submit'])) {
       <form action="" method="post">
          <h3>Welcome User!</h3>
          <br><br>
+         <?php if ($message !== ''): ?>
+            <div class="error-message"><?php echo $message; ?></div>
+         <?php endif; ?>
          <div class="input-field">
             <label for="email">Email Address</label>
-            <input type="email" name="email" id="email" required>
+            <input type="email" name="email" id="email" value="<?php if (isset($_POST['submit'])) { echo $email; } ?>"required>
          </div>
          <div class="input-field">
             <label for="password">Password</label>
             <div class="password-toggle">
-               <input type="password" name="password" id="password" required>
+               <input type="password" name="password" id="password" value="<?php if (isset($_POST['submit'])) { echo $pass; } ?>" required>
                <i class="far fa-eye-slash toggle-pssword" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
             </div>
          </div>
