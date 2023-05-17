@@ -1,41 +1,35 @@
 <?php
+
 include 'components/connect.php';
+
 session_start();
-if (isset($_SESSION['user_id'])) {
+
+if(isset($_SESSION['user_id'])){
    $user_id = $_SESSION['user_id'];
-} else {
+}else{
    $user_id = '';
-}
-if (isset($_POST['submit'])) {
+};
+
+if(isset($_POST['submit'])){
 
    $email = $_POST['email'];
    $email = filter_var($email, FILTER_SANITIZE_STRING);
    $pass = sha1($_POST['password']);
    $pass = filter_var($pass, FILTER_SANITIZE_STRING);
 
-   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
-   $select_user->execute([$email]);
+   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ?");
+   $select_user->execute([$email, $pass]);
    $row = $select_user->fetch(PDO::FETCH_ASSOC);
 
-   if ($select_user->rowCount() > 0) {
-      if ($row['email_verified'] == 1) {
-         // Email is verified, proceed with login
-         if ($row['password'] === $pass) {
-            $_SESSION['user_id'] = $row['id'];
-            header('location: home.php');
-            exit();
-         } else {
-            $message = 'Incorrect username or password!';
-         }
-      } else {
-         // Email is not verified, redirect to otp_verification.php
-         header('location: otp_verification.php');
-         exit();
-      }
-   } else {
-      $message = 'Email is not registered!';
+   if($select_user->rowCount() > 0){
+      $_SESSION['user_id'] = $row['id'];
+      header('location:home.php');
+   }else{
+      $message[] = 'incorrect username or password!';
    }
+
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,7 +48,7 @@ if (isset($_POST['submit'])) {
    <link rel="stylesheet" href="css/index-style.css">
 </head>
 <body>
-   
+<div id="animationWindow"></div>   
 <div class="user-header">
    <?php include 'components/user_header.php'; ?>
 </div>
@@ -63,22 +57,19 @@ if (isset($_POST['submit'])) {
       <form action="" method="post">
          <h3>Welcome User!</h3>
          <br><br>
-         <?php if ($message !== ''): ?>
-            <div class="error-message"><?php echo $message; ?></div>
-         <?php endif; ?>
          <div class="input-field">
             <label for="email">Email Address</label>
-            <input type="email" name="email" id="email" value="<?php if (isset($_POST['submit'])) { echo $email; } ?>"required>
+            <input type="email" name="email" id="email" required>
          </div>
          <div class="input-field">
             <label for="password">Password</label>
             <div class="password-toggle">
-               <input type="password" name="password" id="password" value="<?php if (isset($_POST['submit'])) { echo $pass; } ?>" required>
+               <input type="password" name="password" id="password" required>
                <i class="far fa-eye-slash toggle-pssword" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
             </div>
          </div>
          <div class="input-field">
-            <input type="submit" value="LOGIN" id="login-btn" disabled>
+            <input type="submit" value="LOGIN" id="submit" name="submit" disabled>
          </div>
          <div class="register-now">
             <span>Not yet a Member? </span> <a href="user_register.php">Register now!</a>
@@ -107,7 +98,7 @@ if (isset($_POST['submit'])) {
    document.addEventListener("DOMContentLoaded", function() {
       const emailField = document.getElementById("email");
       const passwordField = document.getElementById("password");
-      const loginButton = document.getElementById("login-btn");
+      const loginButton = document.getElementById("submit");
 
       emailField.addEventListener("input", toggleLoginButton);
       passwordField.addEventListener("input", toggleLoginButton);
@@ -120,6 +111,12 @@ if (isset($_POST['submit'])) {
          }
       }
    });
+
+   var animationWindow = document.getElementById('animationWindow');
+   window.addEventListener('DOMContentLoaded', function() {
+   animationWindow.style.display = 'none';
+   });
+
 </script>
 
 </body>

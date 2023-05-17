@@ -1,152 +1,77 @@
 <?php
-    // Import PHPMailer classes into the global namespace
-    // These must be at the top of your script, not inside a function
-    use PHPMailer\PHPMailer\PHPMailer;
-    use PHPMailer\PHPMailer\SMTP;
-    use PHPMailer\PHPMailer\Exception;
+require_once "components/connect.php";
+require_once "vendor/autoload.php";
 
-    session_start();
-    if (isset($_SESSION['user_id'])) {
-        $user_id = $_SESSION['user_id'];
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+session_start();
+
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+} else {
+    $user_id = '';
+}
+
+if (isset($_POST['submit'])) {
+
+    $fname = $_POST['fname'];
+    $fname = filter_var($fname, FILTER_SANITIZE_STRING);
+    $sname = $_POST['sname'];
+    $sname = filter_var($sname, FILTER_SANITIZE_STRING);
+    $email = $_POST['email'];
+    $email = filter_var($email, FILTER_SANITIZE_STRING);
+    $pass = sha1($_POST['password']);
+    $pass = filter_var($pass, FILTER_SANITIZE_STRING);
+    $cpass = sha1($_POST['confirm-password']);
+    $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
+
+    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
+    $select_user->execute([$email]);
+    $row = $select_user->fetch(PDO::FETCH_ASSOC);
+
+    if ($select_user->rowCount() > 0) {
+        $message[] = 'Email already exists! Please Try Again!';
     } else {
-        $user_id = '';
-    }
-
-    // Load Composer's autoloader
-    require 'vendor/autoload.php';
-
-    include 'components/connect.php';
-    $msg = "";
-
-    if (isset($_POST['submit'])) {
-        $fname = mysqli_real_escape_string($conn, $_POST['fname']);
-        $sname = mysqli_real_escape_string($conn, $_POST['sname']);
-        $email = mysqli_real_escape_string($conn, $_POST['email']);
-        $password = mysqli_real_escape_string($conn, md5($_POST['password']));
-        $cpassword = mysqli_real_escape_string($conn, md5($_POST['confirm-password']));
-        $otp = rand(100000, 999999); // Generate random 6-digit OTP code
-
-        if (mysqli_num_rows(mysqli_query($conn, "SELECT * FROM users WHERE email='{$email}'")) > 0) {
-            $msg = "<div class='alert alert-danger'>{$email} - This Email Address has already been registered.</div>";
+        if ($pass != $cpass) {
+            $message[] = 'Confirm Password not matched! Please Try Again!';
         } else {
-            if ($password === $cpassword) {
-                $sql = "INSERT INTO users (fname, sname, email, password, otp) VALUES ('{$fname}', '{$sname}', '{$email}', '{$password}', '{$otp}')";
-                $result = mysqli_query($conn, $sql);
+            $verification_code = sha1(rand()); // Generate verification code
 
-                if ($result) {
-                    echo "<div style='display: none;'>";
-                    // Create an instance; passing `true` enables exceptions
-                    $mail = new PHPMailer(true);
+            $insert_user = $conn->prepare("INSERT INTO `users`(fname, sname, email, password, verification_code) VALUES(?,?,?,?,?)");
+            $insert_user->execute([$fname, $sname, $email, $cpass, $verification_code]);
+            $message[] = 'You Successfully Registered, Login Now!';
 
-                    try {
-                        // Server settings
-                        $mail->SMTPDebug = SMTP::DEBUG_SERVER;                      // Enable verbose debug output
-                        $mail->isSMTP();                                            // Send using SMTP
-                        $mail->Host       = 'smtp.gmail.com';                        // Set the SMTP server to send through
-                        $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
-                        $mail->Username   = 'joshua.laurence.fabi@gmail.com';         // SMTP username
-                        $mail->Password   = 'ziwbzzqguwnueqis';                       // SMTP password
-                        $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption
-                        $mail->Port       = 587;                                    // TCP port to connect to
+            // Send verification email
+            $mail = new PHPMailer(true);
 
-                        // Recipients
-                        $mail->setFrom('joshua.laurence.fabi@gmail.com', 'Joshua Fabillon');
-                        $mail->addAddress($email, $fname.' '.$sname);
+            try {
+                //Server settings
+                $mail->SMTPDebug = SMTP::DEBUG_OFF; // Disable debugging
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'joshua.laurence.fabi@gmail.com';
+                $mail->Password = 'ziwbzzqguwnueqis';
+                $mail->SMTPSecure = 'tls';
+                $mail->Port = 587;
 
-                        // Email styles
-                        $styles = "
-                          /* Main styles */
-                          body {
-                              font-family: Arial, sans-serif;
-                              color: #333333;
-                          }
-                          h1 {
-                              font-size: 24px;
-                              font-weight: bold;
-                              color: #333333;
-                              margin-top: 0;
-                              margin-bottom: 20px;
-                          }
-                          p {
-                              font-size: 16px;
-                              line-height: 1.5;
-                              margin-top: 0;
-                              margin-bottom: 20px;
-                          }
-                          a {
-                              color: #ffffff;
-                              background-color: #1a73e8;
-                              border-radius: 4px;
-			                        display: inline-block;
-                              font-size: 16px;
-                              font-weight: bold;
-                              text-align: center;
-                              text-decoration: none;
-                              padding: 12px 24px;
-                            }
-                            a:hover {
-                              background-color: #0d47a1;
-                            }
-                            /* Responsive styles */
-                            @media (max-width: 600px) {
-                              h1 {
-                              font-size: 20px;
-                              }
-                              p {
-                              font-size: 14px;
-                              }
-                              a {
-                              font-size: 14px;
-                              padding: 8px 16px;
-                              }
-                            }
-                            ";
-                    // Email body
-                    $body = '
-                      <html>
-                          <head>
-                            <title>Email Verification</title>
-                          </head>
-                          <body>
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <tr>
-                                  <td align="center">
-                                      <table width="600" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-                                        <tr>
-                                            <td style="background-color: #ffffff; padding: 40px;">
-                                              <h1>Email Verification</h1>
-                                              <p>Please enter the OTP code below to verify your email address:</p>
-                                              <p><strong>'.$otp.'</strong></p>
-                                            </td>
-                                        </tr>
-                                      </table>
-                                  </td>
-                                </tr>
-                            </table>
-                            <style>'.$styles.'</style>
-                          </body>
-                      </html>
-                    ';
+                //Recipients
+                $mail->setFrom('joshua.laurence.fabi@gmail.com');
+                $mail->addAddress($email);
 
-                    // Content
-                    $mail->isHTML(true);       // Set email format to HTML
-                    $mail->Subject = 'Email Verification (OTP) - No Reply';
-                    $mail->Body    = $body;
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = 'Email Verification';
+                $verification_link = 'http://localhost/protools-hardware-store-website/verify.php?code=' . $verification_code;
+                $mail->Body = "Please click the following link to verify your email address: <a href=\"$verification_link\">$verification_link</a>";
 
-                    $mail->send();
-                    echo 'Message has been sent';
-                    header("Location: otp_verification.php");
-                    exit();
-                } catch (Exception $e) {
-                    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-                }
-                echo "</div>";
-                $msg = "<div class='alert alert-info'>We've sent an OTP code to your email address.</div>";
-            } else {
-                $msg = "<div class='alert alert-danger'>Something went wrong.</div>";
+                $mail->send();
+                $message[] = 'Verification link has been sent to your email. Please check your inbox.';
+            } catch (Exception $e) {
+                $message[] = 'Verification email could not be sent. Please try again later.';
             }
-        } else {
-            $msg = "<div class='alert alert-danger'>Password and Confirm Password do not match.</div>";
         }
     }
 }
@@ -176,55 +101,6 @@
       document.getElementById("popup").style.display = "none";
     }
 	</script>
-  <!-- Script for opening captcha popup -->
-  <script>
-    // Display captcha popup
-    function showCaptchaPopup() {
-      document.getElementById("overlay").style.display = "block";
-      document.getElementById("captcha-popup").style.display = "block";
-    }
-
-    // Close captcha popup
-    function closeCaptchaPopup() {
-      document.getElementById("overlay").style.display = "none";
-      document.getElementById("captcha-popup").style.display = "none";
-    }
-
-    // Validate captcha on form submission
-    document.querySelector("form").addEventListener("submit", function(event) {
-      if (!document.getElementById("terms").checked) {
-        event.preventDefault(); // Prevent form submission if terms are not agreed
-        alert("Please agree to the terms and conditions.");
-      } else if (!document.getElementById("captcha-submit").disabled) {
-        event.preventDefault(); // Prevent form submission if captcha is not completed
-        alert("Please complete the captcha.");
-      }
-    });
-
-    // Generate and display captcha popup
-    document.getElementById("register-btn").addEventListener("click", function(event) {
-      event.preventDefault(); // Prevent default button behavior
-      showCaptchaPopup();
-      generateCaptcha();
-    });
-
-    // Reload captcha
-    document.getElementById("reload-button").addEventListener("click", function() {
-      document.getElementById("user-input").value = "";
-      generateCaptcha();
-    });
-
-    // Validate captcha and enable submit button
-    document.getElementById("next").addEventListener("click", function() {
-      var userInput = document.getElementById("user-input").value;
-      var captchaText = document.getElementById("captcha-canvas").textContent;
-      if (userInput === captchaText) {
-        document.getElementById("captcha-submit").disabled = false;
-      } else {
-        alert("Captcha incorrect. Please try again.");
-      }
-    });
-  </script>
 </head>
 <body>
 <div class="user-header">
@@ -234,7 +110,6 @@
 <br>
 <br>
 <br>
-<?php $message; ?>
 <div class="container">
       <div class="form-container">
         <form action="" method="post">
@@ -244,7 +119,7 @@
           <!-- FIRST NAME FIELD -->
           <div class="input-field">
             <label for="fname">First Name</label>
-            <input type="text" name="fname" id="fname" required>
+            <input type="text" name="fname" id="fname" value="<?php if (isset($_POST['submit'])) { echo $fname; } ?>" required>
           </div>
           <!-- SURNAME FIELD -->
           <div class="input-field">
@@ -315,7 +190,7 @@
           <br>
           <!-- SUBMIT BUTTON -->
           <div class="input-field">
-            <input type="submit" value="Register" id="register-btn"disabled>
+            <input type="submit" value="Register" id="submit" name="submit" disabled>
           </div>
           <div class="captcha-container">
                 <div class="captcha-wrapper">
@@ -343,7 +218,6 @@
   <?php include 'components/footer.php'; ?>
 </div>
 <script src="js/script.js"></script>
-<script src="js/script_captcha.js"></script>
 <script>
   function togglePasswordVisibility(icon) {
     var passwordField = icon.previousElementSibling;
@@ -369,50 +243,12 @@
       document.getElementById("overlay").style.display = "none";
       document.getElementById("popup").style.display = "none";
     }
-
-    // Generate captcha
-    function generateCaptcha() {
-      var canvas = document.getElementById("canvas");
-      var ctx = canvas.getContext("2d");
-      var characters = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-      var captchaLength = 6;
-      var captchaText = "";
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (var i = 0; i < captchaLength; i++) {
-        var char = characters[Math.floor(Math.random() * characters.length)];
-        captchaText += char;
-        ctx.font = "50px Arial";
-        ctx.fillStyle = "#000000";
-        ctx.fillText(char, i * 50 + 20, 70);
-      }
-      return captchaText;
-    }
-
-    // Reload captcha
-    document.getElementById("reload-button").addEventListener("click", function() {
-      document.getElementById("user-input").value = "";
-      var captchaText = generateCaptcha();
-    });
-
-    // Validate captcha
-    document.getElementById("next").addEventListener("click", function() {
-      var userInput = document.getElementById("user-input").value;
-      var captchaText = document.getElementById("canvas").textContent;
-      if (userInput === captchaText) {
-        document.getElementById("terms").checked = true;
-        document.getElementById("terms").disabled = true;
-        document.getElementById("register-btn").disabled = false;
-      } else {
-        alert("Captcha incorrect. Please try again.");
-      }
-    });
-
     // Disable register button if terms checkbox is unchecked
     document.getElementById("terms").addEventListener("change", function() {
       if (this.checked) {
-        document.getElementById("register-btn").disabled = false;
+        document.getElementById("submit").disabled = false;
       } else {
-        document.getElementById("register-btn").disabled = true;
+        document.getElementById("submit").disabled = true;
       }
     });
 </script>

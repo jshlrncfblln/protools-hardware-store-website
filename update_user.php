@@ -12,13 +12,15 @@ if(isset($_SESSION['user_id'])){
 
 if(isset($_POST['submit'])){
 
-   $name = $_POST['name'];
-   $name = filter_var($name, FILTER_SANITIZE_STRING);
+   $fname = $_POST['fname'];
+   $fname = filter_var($fname, FILTER_SANITIZE_STRING);
+   $sname = $_POST['sname'];
+   $sname = filter_var($sname, FILTER_SANITIZE_STRING);
    $email = $_POST['email'];
    $email = filter_var($email, FILTER_SANITIZE_STRING);
 
-   $update_profile = $conn->prepare("UPDATE `users` SET name = ?, email = ? WHERE id = ?");
-   $update_profile->execute([$name, $email, $user_id]);
+   $update_profile = $conn->prepare("UPDATE `users` SET fname = ?, sname = ?,email = ? WHERE id = ?");
+   $update_profile->execute([$fname, $sname, $email, $user_id]);
 
    $empty_pass = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';
    $prev_pass = $_POST['prev_pass'];
@@ -73,11 +75,12 @@ if(isset($_POST['submit'])){
    <form action="" method="post">
       <h3>update now</h3>
       <input type="hidden" name="prev_pass" value="<?= $fetch_profile["password"]; ?>">
-      <input type="text" name="name" required placeholder="enter your username" maxlength="20"  class="box" value="<?= $fetch_profile["name"]; ?>">
-      <input type="email" name="email" required placeholder="enter your email" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')" value="<?= $fetch_profile["email"]; ?>">
-      <input type="password" name="old_pass" placeholder="enter your old password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="new_pass" placeholder="enter your new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="cpass" placeholder="confirm your new password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="text" name="fname" required placeholder="First Name" maxlength="20"  class="box" value="<?= $fetch_profile["fname"]; ?>">
+      <input type="text" name="sname" required placeholder="Surname" maxlength="20"  class="box" value="<?= $fetch_profile["fname"]; ?>">
+      <input type="email" name="email" required placeholder="Email Address" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')" value="<?= $fetch_profile["email"]; ?>">
+      <input type="password" name="old_pass" placeholder="Old Password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="new_pass" placeholder="New Password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
+      <input type="password" name="cpass" placeholder="Confirm New Password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="submit" value="update now" class="btn" name="submit">
    </form>
 
