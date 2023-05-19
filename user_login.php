@@ -48,9 +48,11 @@ if(isset($_POST['submit'])){
    <link rel="stylesheet" href="css/index-style.css">
 </head>
 <body>
-<div id="animationWindow"></div>   
 <div class="user-header">
    <?php include 'components/user_header.php'; ?>
+</div>
+<div id="loading-animation">
+   <div class="loading-spinner"></div>
 </div>
 <div class="container">
    <div class="form-container">
@@ -111,13 +113,6 @@ if(isset($_POST['submit'])){
          }
       }
    });
-
-   var animationWindow = document.getElementById('animationWindow');
-   window.addEventListener('DOMContentLoaded', function() {
-   animationWindow.style.display = 'none';
-   });
-
 </script>
-
 </body>
 </html>
