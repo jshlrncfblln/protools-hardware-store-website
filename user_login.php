@@ -1,36 +1,41 @@
 <?php
-
 include 'components/connect.php';
 
 session_start();
 
-if(isset($_SESSION['user_id'])){
+if (isset($_SESSION['user_id'])) {
    $user_id = $_SESSION['user_id'];
-}else{
+} else {
    $user_id = '';
-};
-
-if(isset($_POST['submit'])){
-
-   $email = $_POST['email'];
-   $email = filter_var($email, FILTER_SANITIZE_STRING);
-   $pass = sha1($_POST['password']);
-   $pass = filter_var($pass, FILTER_SANITIZE_STRING);
-
-   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ?");
-   $select_user->execute([$email, $pass]);
-   $row = $select_user->fetch(PDO::FETCH_ASSOC);
-
-   if($select_user->rowCount() > 0){
-      $_SESSION['user_id'] = $row['id'];
-      header('location:home.php');
-   }else{
-      $message[] = 'incorrect username or password!';
-   }
-
 }
 
+if (isset($_GET['email']) && isset($_GET['verification_code'])) {
+   $email = $_GET['email'];
+   $verification_code = $_GET['verification_code'];
+
+   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
+   $select_user->execute([$email]);
+   $row = $select_user->fetch(PDO::FETCH_ASSOC);
+
+   if ($select_user->rowCount() > 0) {
+      if ($row['email_verified'] == 0 && $row['verification_code'] == $verification_code) {
+         $update_user = $conn->prepare("UPDATE `users` SET email_verified = 1 WHERE email = ?");
+         $update_user->execute([$email]);
+
+         $message = 'Your email has been verified successfully. You can now log in.';
+      } else {
+         $message = 'Invalid verification link.';
+      }
+   } else {
+      $message = 'Invalid verification link.';
+   }
+} else {
+   $message = 'Invalid verification link.';
+}
+
+echo $message;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -50,9 +55,6 @@ if(isset($_POST['submit'])){
 <body>
 <div class="user-header">
    <?php include 'components/user_header.php'; ?>
-</div>
-<div id="loading-animation">
-   <div class="loading-spinner"></div>
 </div>
 <div class="container">
    <div class="form-container">

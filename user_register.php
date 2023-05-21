@@ -15,7 +15,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 if (isset($_POST['submit'])) {
-
+    // Process form data
     $fname = $_POST['fname'];
     $fname = filter_var($fname, FILTER_SANITIZE_STRING);
     $sname = $_POST['sname'];
@@ -32,16 +32,23 @@ if (isset($_POST['submit'])) {
     $row = $select_user->fetch(PDO::FETCH_ASSOC);
 
     if ($select_user->rowCount() > 0) {
-        $message[] = 'Email already exists! Please Try Again!';
+        $message = 'Email already exists! Please try again.';
+        $_SESSION['message'] = $message;
+        header("Location: user_register.php"); // Redirect back to the registration page
+        exit();
     } else {
         if ($pass != $cpass) {
-            $message[] = 'Confirm Password not matched! Please Try Again!';
+            $message = 'Confirm Password not matched! Please try again.';
+            $_SESSION['message'] = $message;
+            header("Location: user_register.php"); // Redirect back to the registration page
+            exit();
         } else {
             $verification_code = sha1(rand()); // Generate verification code
 
             $insert_user = $conn->prepare("INSERT INTO `users`(fname, sname, email, password, verification_code) VALUES(?,?,?,?,?)");
             $insert_user->execute([$fname, $sname, $email, $cpass, $verification_code]);
-            $message[] = 'You Successfully Registered, Login Now!';
+            $message = 'You have successfully registered! Please check your email for verification.';
+            $_SESSION['message'] = $message;
 
             // Send verification email
             $mail = new PHPMailer(true);
@@ -53,7 +60,7 @@ if (isset($_POST['submit'])) {
                 $mail->Host = 'smtp.gmail.com';
                 $mail->SMTPAuth = true;
                 $mail->Username = 'joshua.laurence.fabi@gmail.com';
-                $mail->Password = 'ziwbzzqguwnueqis';
+                $mail->Password = 'kaydticjfcfiexfi';
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
@@ -68,10 +75,76 @@ if (isset($_POST['submit'])) {
                 $mail->Body = "Please click the following link to verify your email address: <a href=\"$verification_link\">$verification_link</a>";
 
                 $mail->send();
-                $message[] = 'Verification link has been sent to your email. Please check your inbox.';
             } catch (Exception $e) {
-                $message[] = 'Verification email could not be sent. Please try again later.';
+                $message = 'Verification email could not be sent. Please try again later.';
+                $_SESSION['message'] = $message;
+                header("Location: user_register.php"); // Redirect back to the registration page
+                exit();
             }
+
+            // Set up modal-like popup message
+            echo "
+            <html>
+            <head>
+                <style>
+                    body {
+                      margin: 0;
+                      padding: 0;
+                      font-family: Arial, sans-serif;
+                    }
+                    .modal-overlay {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .modal-content {
+                        background-color: #fff;
+                        border-radius: 5px;
+                        padding: 20px;
+                        max-width: 400px;
+                        text-align: center;
+                        font-size: 15px;
+                    }
+
+                    .modal-close {
+                        margin-top: 10px;
+                        padding: 10px 20px;
+                        background-color: #f57c00;
+                        color: #fff;
+                        border: none;
+                        border-radius: 5px;
+                        cursor: pointer;
+                    }
+                    .modal-close:hover{
+                        background-color: #ff9900;
+                    }
+                </style>
+                <script>
+                    function closeModal() {
+                        var modalOverlay = document.getElementById('modal-overlay');
+                        modalOverlay.style.display = 'none';
+                        window.location.href = 'user_register.php';
+                    }
+                </script>            
+            </head>
+            <body>
+                <div id='modal-overlay' class='modal-overlay'>
+                    <div class='modal-content'>
+                        <p>$message</p>
+                        <button class='modal-close' onclick='closeModal();'>OK</button>
+                    </div>
+                </div>
+            </body>
+            </html>
+            ";
+            exit();
         }
     }
 }
@@ -108,8 +181,58 @@ if (isset($_POST['submit'])) {
       document.getElementById("popup").style.display = "none";
     }
 	</script>
+     <style>
+        /* CSS for full-page loader */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+        
+        .hidden {
+            opacity: 0;
+        }
+
+        #loader {
+            width: 100px;  /* Set the desired width */
+            height: auto;  /* Maintain aspect ratio */
+        }
+   </style>
+   <script>
+        // JavaScript to fade out the loader and container after 5 seconds
+        window.addEventListener("load", function() {
+            var loaderContainer = document.getElementById("loaderContainer");
+            var loader = document.getElementById("loader");
+            
+            setTimeout(function() {
+                loaderContainer.classList.add("hidden");
+                setTimeout(function() {
+                    loaderContainer.style.display = "none";
+                }, 500);
+            }, 2000);
+        });
+    </script>
 </head>
 <body>
+  
+<div class="loader-container" id="loaderContainer">
+      <img src="images/Hourglass.gif" alt="Loader" id="loader">
+</div>
+
 <div class="user-header">
   <?php include 'components/user_header.php'; ?>
 </div>
@@ -201,16 +324,6 @@ if (isset($_POST['submit'])) {
           <div class="input-field">
             <input type="submit" value="Register" id="submit" name="submit" disabled>
           </div>
-          <div class="captcha-container">
-                <div class="captcha-wrapper">
-                  <canvas id="canvas" width="300" height="100"></canvas>
-                  <button id="reload-button">
-                    <i class="fa-solid fa-arrow-rotate-right"></i>
-                  </button>
-                </div>
-                <input type="text" id="user-input" placeholder="Enter the text in the image" />
-                <button id="next">Submit</button>
-              </div>
           <div class="login-now">
             <span>Already a Member? </span> <a href="user_login.php">Login now!</a>
           </div>
