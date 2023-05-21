@@ -47,7 +47,7 @@ if (isset($_POST['submit'])) {
             $mail = new PHPMailer(true);
 
             try {
-                //Server settings
+                // Server settings
                 $mail->SMTPDebug = SMTP::DEBUG_OFF; // Disable debugging
                 $mail->isSMTP();
                 $mail->Host = 'smtp.gmail.com';
@@ -57,11 +57,11 @@ if (isset($_POST['submit'])) {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port = 587;
 
-                //Recipients
+                // Recipients
                 $mail->setFrom('joshua.laurence.fabi@gmail.com');
                 $mail->addAddress($email);
 
-                //Content
+                // Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Email Verification';
                 $verification_link = 'http://localhost/protools-hardware-store-website/verify.php?code=' . $verification_code;
@@ -76,6 +76,7 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,6 +91,12 @@ if (isset($_POST['submit'])) {
    <link rel="stylesheet" href="css/style.css">
    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
    <link rel="stylesheet" href="css/register-style.css">
+   <style>
+    .error{
+      color: red;
+      font-size: 12px;
+    }
+   </style>
   <script>
 		function openPopup() {
       document.getElementById("overlay").style.display = "block";
@@ -106,47 +113,49 @@ if (isset($_POST['submit'])) {
 <div class="user-header">
   <?php include 'components/user_header.php'; ?>
 </div>
-<br>
-<br>
-<br>
-<br>
+<br><br>
 <div class="container">
       <div class="form-container">
-        <form action="" method="post">
+        <form action="" method="post" id="registerForm">
           <h3>Register</h3>
-          <br>
-          <br>
+          <br><br>
           <!-- FIRST NAME FIELD -->
           <div class="input-field">
             <label for="fname">First Name</label>
-            <input type="text" name="fname" id="fname" value="<?php if (isset($_POST['submit'])) { echo $fname; } ?>" required>
+            <input type="text" name="fname" id="fname" required>
+            <span id="fnameError" class="error"></span>
           </div>
           <!-- SURNAME FIELD -->
           <div class="input-field">
             <label for="sname">Surname</label>
             <input type="text" name="sname" id="sname" required>
+            <span id="snameError" class="error"></span>
           </div>
           <!-- EMAIL FIELD -->
           <div class="input-field">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" required>
+            <span id="emailError" class="error"></span>
           </div>
           <!-- PASSWORD FIELD -->
           <div class="input-field">
             <label for="password">Password</label>
             <div class="password-toggle">
               <input type="password" name="password" id="password" required>
-              <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
+              <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this, 'password')"></i>
             </div>
+            <span id="passwordError" class="error"></span>
           </div>
           <!-- CONFIRM PASSWORD FIELD -->
           <div class="input-field">
             <label for="confirm-password">Confirm Password</label>
             <div class="password-toggle">
               <input type="password" name="confirm-password" id="confirm-password" required>
-              <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
+              <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this, 'confirm-password')"></i>
             </div>
+            <span id="confirmPasswordError" class="error"></span>
           </div>
+
           <!-- Checkbox for terms and conditions -->
           <div class="checkbox-container">
             <div class="checkbox">
@@ -219,18 +228,147 @@ if (isset($_POST['submit'])) {
 </div>
 <script src="js/script.js"></script>
 <script>
-  function togglePasswordVisibility(icon) {
-    var passwordField = icon.previousElementSibling;
-    if (passwordField.type === 'password') {
-      passwordField.type = 'text';
-      icon.classList.remove('fa-eye-slash');
-      icon.classList.add('fa-eye');
-    } else {
-      passwordField.type = 'password';
-      icon.classList.add('fa-eye-slash');
-      icon.classList.remove('fa-eye');
-    }
+  //getting the id for validation
+const form = document.getElementById("registerForm");
+const fnameInput = document.getElementById("fname");
+const snameInput = document.getElementById("sname");
+const emailInput = document.getElementById("email");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirm-password");
+
+//getting the id for error message
+const fnameError = document.getElementById("fnameError");
+const snameError = document.getElementById("snameError");
+const emailError = document.getElementById("emailError");
+const passwordError = document.getElementById("passwordError");
+const confirmPasswordError = document.getElementById("confirmPasswordError");
+
+
+fnameInput.addEventListener("input", validateFirstName);
+snameInput.addEventListener("input", validateSurName);
+emailInput.addEventListener("input", validateEmail);
+passwordInput.addEventListener("input", validatePassword);
+confirmPasswordInput.addEventListener("input", validateConfirmPassword);
+
+function validateForm(){
+  const fnameValid = validateFirstName();
+  const snameValid = validateSurName();
+  const emailValid = validateEmail();
+  const passValid = validatePassword();
+  const cpassValid = validateConfirmPassword();
+
+  if (fnameValid && snameValid && emailValid && passValid && cpassValid){
+    form.submit();
   }
+}
+
+function validateFirstName() {
+  const firstNameValue = fnameInput.value.trim();
+  const regex = /^[A-Za-z]+$/;
+
+  if (firstNameValue === "") {
+    fnameInput.classList.remove("error");
+    fnameError.textContent = "";
+    return true;
+  } else if (!regex.test(firstNameValue)) {
+    fnameInput.classList.add("error");
+    fnameError.textContent = "First name must consist only of letters";
+    return false;
+  } else {
+    fnameInput.classList.remove("error");
+    fnameError.textContent = "";
+    return true;
+  }
+}
+
+function validateSurName() {
+  const surnameValue = snameInput.value.trim();
+  const regex = /^[A-Za-z]+$/;
+
+  if (surnameValue === "") {
+    snameInput.classList.remove("error");
+    snameError.textContent = "";
+    return true;
+  } else if (!regex.test(surnameValue)) {
+    snameInput.classList.add("error");
+    snameError.textContent = "Surname must consist only of letters";
+    return false;
+  } else {
+    snameInput.classList.remove("error");
+    snameError.textContent = "";
+    return true;
+  }
+}
+
+function validateEmail() {
+  const emailValue = emailInput.value.trim();
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (emailValue === "") {
+    emailInput.classList.remove("error");
+    emailError.textContent = "";
+    return true;
+  } else if (!regex.test(emailValue)) {
+    emailInput.classList.add("error");
+    emailError.textContent = "Invalid email format";
+    return false;
+  } else {
+    emailInput.classList.remove("error");
+    emailError.textContent = "";
+    return true;
+  }
+}
+
+function validatePassword() {
+  const passwordValue = passwordInput.value;
+  const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+
+  if (passwordValue === "") {
+    passwordInput.classList.remove("error");
+    passwordError.textContent = "";
+    return true;
+  } else if (!regex.test(passwordValue)) {
+    passwordInput.classList.add("error");
+    passwordError.textContent = "Password must be 8 characters long and contain at least 1 uppercase letter, 1 lowercase letter, and 1 number";
+    return false;
+  } else {
+    passwordInput.classList.remove("error");
+    passwordError.textContent = "";
+    return true;
+  }
+}
+
+function validateConfirmPassword() {
+  const confirmPasswordValue = confirmPasswordInput.value;
+  const passwordValue = passwordInput.value;
+
+  if (confirmPasswordValue === "") {
+    confirmPasswordInput.classList.remove("error");
+    confirmPasswordError.textContent = "";
+    return true;
+  } else if (confirmPasswordValue !== passwordValue) {
+    confirmPasswordInput.classList.add("error");
+    confirmPasswordError.textContent = "Passwords do not match";
+    return false;
+  } else {
+    confirmPasswordInput.classList.remove("error");
+    confirmPasswordError.textContent = "";
+    return true;
+  }
+}
+function togglePasswordVisibility(element, fieldId) {
+  const field = document.getElementById(fieldId);
+  if (field.type === "password") {
+    field.type = "text";
+    element.classList.remove("fa-eye-slash");
+    element.classList.add("fa-eye");
+  } else {
+    field.type = "password";
+    element.classList.remove("fa-eye");
+    element.classList.add("fa-eye-slash");
+  }
+}
+
 
     // Display terms and conditions popup
     function showPopup() {

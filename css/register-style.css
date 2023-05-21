@@ -21,6 +21,12 @@ body {
   padding: 20px;
 }
 
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
 form {
   background-color: var(--light-color);
   padding: 20px;
