@@ -27,6 +27,39 @@ if (isset($_POST['submit'])) {
     $cpass = sha1($_POST['confirm-password']);
     $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
 
+    // Validation
+    $errors = [];
+
+    if (empty($fname)) {
+        $errors[] = "First name is required.";
+    }
+
+    if (empty($sname)) {
+        $errors[] = "Last name is required.";
+    }
+
+    if (empty($email)) {
+        $errors[] = "Email is required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format.";
+    }
+
+    if (empty($_POST['password'])) {
+        $errors[] = "Password is required.";
+    } elseif (strlen($_POST['password']) < 6) {
+        $errors[] = "Password should be at least 6 characters long.";
+    }
+
+    if ($_POST['password'] !== $_POST['confirm-password']) {
+        $errors[] = "Confirm password does not match.";
+    }
+
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        header("Location: user_register.php"); // Redirect back to the registration page
+        exit();
+    }
+
     $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
     $select_user->execute([$email]);
     $row = $select_user->fetch(PDO::FETCH_ASSOC);
@@ -37,119 +70,51 @@ if (isset($_POST['submit'])) {
         header("Location: user_register.php"); // Redirect back to the registration page
         exit();
     } else {
-        if ($pass != $cpass) {
-            $message = 'Confirm Password not matched! Please try again.';
+        $verification_code = sha1(rand()); // Generate verification code
+
+        $insert_user = $conn->prepare("INSERT INTO `users`(fname, sname, email, password, verification_code) VALUES(?,?,?,?,?)");
+        $insert_user->execute([$fname, $sname, $email, $cpass, $verification_code]);
+        $message = 'You have successfully registered! Please check your email for verification.';
+        $_SESSION['message'] = $message;
+
+        // Send verification email
+        $mail = new PHPMailer(true);
+
+        try {
+            // Server settings
+            $mail->SMTPDebug = SMTP::DEBUG_OFF; // Disable debugging
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'joshua.laurence.fabi@gmail.com';
+            $mail->Password = 'kaydticjfcfiexfi';
+            $mail->SMTPSecure = 'tls';
+            $mail->Port = 587;
+
+            // Recipients
+            $mail->setFrom('joshua.laurence.fabi@gmail.com');
+            $mail->addAddress($email);
+
+            // Content
+            $mail->isHTML(true);
+            $mail->Subject = 'Email Verification';
+            $verification_link = 'http://localhost/protools-hardware-store-website/verify.php?code=' . $verification_code;
+            $mail->Body = "Please click the following link to verify your email address: <a href=\"$verification_link\">$verification_link</a>";
+
+            $mail->send();
+        } catch (Exception $e) {
+            $message = 'Verification email could not be sent. Please try again later.';
             $_SESSION['message'] = $message;
             header("Location: user_register.php"); // Redirect back to the registration page
             exit();
-        } else {
-            $verification_code = sha1(rand()); // Generate verification code
-
-            $insert_user = $conn->prepare("INSERT INTO `users`(fname, sname, email, password, verification_code) VALUES(?,?,?,?,?)");
-            $insert_user->execute([$fname, $sname, $email, $cpass, $verification_code]);
-            $message = 'You have successfully registered! Please check your email for verification.';
-            $_SESSION['message'] = $message;
-
-            // Send verification email
-            $mail = new PHPMailer(true);
-
-            try {
-                // Server settings
-                $mail->SMTPDebug = SMTP::DEBUG_OFF; // Disable debugging
-                $mail->isSMTP();
-                $mail->Host = 'smtp.gmail.com';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'joshua.laurence.fabi@gmail.com';
-                $mail->Password = 'kaydticjfcfiexfi';
-                $mail->SMTPSecure = 'tls';
-                $mail->Port = 587;
-
-                // Recipients
-                $mail->setFrom('joshua.laurence.fabi@gmail.com');
-                $mail->addAddress($email);
-
-                // Content
-                $mail->isHTML(true);
-                $mail->Subject = 'Email Verification';
-                $verification_link = 'http://localhost/protools-hardware-store-website/verify.php?code=' . $verification_code;
-                $mail->Body = "Please click the following link to verify your email address: <a href=\"$verification_link\">$verification_link</a>";
-
-                $mail->send();
-            } catch (Exception $e) {
-                $message = 'Verification email could not be sent. Please try again later.';
-                $_SESSION['message'] = $message;
-                header("Location: user_register.php"); // Redirect back to the registration page
-                exit();
-            }
-
-            // Set up modal-like popup message
-            echo "
-            <html>
-            <head>
-                <style>
-                    body {
-                      margin: 0;
-                      padding: 0;
-                      font-family: Arial, sans-serif;
-                    }
-                    .modal-overlay {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background-color: rgba(0, 0, 0, 0.5);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-
-                    .modal-content {
-                        background-color: #fff;
-                        border-radius: 5px;
-                        padding: 20px;
-                        max-width: 400px;
-                        text-align: center;
-                        font-size: 15px;
-                    }
-
-                    .modal-close {
-                        margin-top: 10px;
-                        padding: 10px 20px;
-                        background-color: #f57c00;
-                        color: #fff;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                    }
-                    .modal-close:hover{
-                        background-color: #ff9900;
-                    }
-                </style>
-                <script>
-                    function closeModal() {
-                        var modalOverlay = document.getElementById('modal-overlay');
-                        modalOverlay.style.display = 'none';
-                        window.location.href = 'user_register.php';
-                    }
-                </script>            
-            </head>
-            <body>
-                <div id='modal-overlay' class='modal-overlay'>
-                    <div class='modal-content'>
-                        <p>$message</p>
-                        <button class='modal-close' onclick='closeModal();'>OK</button>
-                    </div>
-                </div>
-            </body>
-            </html>
-            ";
-            exit();
         }
+
+        $_SESSION['message'] = $message;
+        header("Location: user_register.php"); // Redirect back to the registration page
+        exit();
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>

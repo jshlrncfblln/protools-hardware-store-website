@@ -23,6 +23,8 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
          $update_user->execute([$email]);
 
          $message = 'Your email has been verified successfully. You can now log in.';
+      } elseif ($row['email_verified'] == 0) {
+         $message = 'Your email is not yet verified. Please check your email and click the verification link.';
       } else {
          $message = 'Invalid verification link.';
       }
@@ -32,9 +34,8 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
 } else {
    $message = 'Invalid verification link.';
 }
-
-echo $message;
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
