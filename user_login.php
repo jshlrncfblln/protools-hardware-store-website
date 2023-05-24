@@ -23,19 +23,23 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
          $update_user->execute([$email]);
 
          $message = 'Your email has been verified successfully. You can now log in.';
+         $messageClass = 'success';
       } elseif ($row['email_verified'] == 0) {
          $message = 'Your email is not yet verified. Please check your email and click the verification link.';
+         $messageClass = 'error';
       } else {
          $message = 'Invalid verification link.';
+         $messageClass = 'error';
       }
    } else {
       $message = 'Invalid verification link.';
+      $messageClass = 'error';
    }
 } else {
    $message = 'Invalid verification link.';
+   $messageClass = 'error';
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -44,14 +48,37 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Login - ProTools</title>
+
    <link rel="shortcut icon" type="x-icon" href="images/protools-logo.png" sizes="16x16 32x32 48x48">
+
    <!-- font awesome cdn link  -->
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
    <!-- Custom font link -->
    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
+   
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
    <link rel="stylesheet" href="css/index-style.css">
+
+   <style>
+      .message {
+         font-size: 15px;
+         margin-top: 10px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         text-align: center;
+      }
+
+      .message.success {
+         color: green;
+      }
+
+      .message.error {
+         color: red;
+      }
+   </style>
 </head>
 <body>
 <div class="user-header">
@@ -61,7 +88,10 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
    <div class="form-container">
       <form action="" method="post">
          <h3>Welcome User!</h3>
-         <br><br>
+         <div class="message <?php echo $messageClass; ?>">
+            <?php echo $message; ?>
+         </div>
+         <br>
          <div class="input-field">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" required>
@@ -100,10 +130,12 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
          icon.classList.remove('fa-eye');
       }
    }
+
    document.addEventListener("DOMContentLoaded", function() {
       const emailField = document.getElementById("email");
       const passwordField = document.getElementById("password");
       const loginButton = document.getElementById("submit");
+      const messageElement = document.querySelector(".message");
 
       emailField.addEventListener("input", toggleLoginButton);
       passwordField.addEventListener("input", toggleLoginButton);
@@ -115,6 +147,11 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
             loginButton.disabled = true;
          }
       }
+
+      // Hide the message after 3 seconds
+      setTimeout(function() {
+         messageElement.style.display = "none";
+      }, 3000);
    });
 </script>
 </body>
