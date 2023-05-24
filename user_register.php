@@ -176,7 +176,7 @@ if (isset($_POST['submit'])) {
             width: 100px;  /* Set the desired width */
             height: auto;  /* Maintain aspect ratio */
         }
-   </style>
+    </style>
    <script>
         // JavaScript to fade out the loader and container after 5 seconds
         window.addEventListener("load", function() {
@@ -191,6 +191,24 @@ if (isset($_POST['submit'])) {
             }, 2000);
         });
     </script>
+
+    <style>
+      .error {
+         color: red;
+         font-size: 12px;
+      }
+
+      .success {
+         color: green;
+         font-size: 12px;
+      }
+
+      .message-container {
+         text-align: center;
+         margin-top: 20px;
+      }
+    </style>
+
 </head>
 <body>
   
@@ -206,7 +224,19 @@ if (isset($_POST['submit'])) {
       <div class="form-container">
         <form action="" method="post" id="registerForm">
           <h3>Register</h3>
-          <br><br>
+          <div class="message-container">
+            <?php
+            if (isset($_SESSION['message'])) {
+              $message = $_SESSION['message'];
+              if ($message == 'Verification email could not be sent. Please try again later.') {
+                  echo '<span class="error">' . $message . '</span>';
+              } elseif ($message == 'You have successfully registered! Please check your email for verification.') {
+                  echo '<span class="success">' . $message . '</span>';
+              }
+              unset($_SESSION['message']);
+            }
+            ?>
+          </div>
           <!-- FIRST NAME FIELD -->
           <div class="input-field">
             <label for="fname">First Name</label>
