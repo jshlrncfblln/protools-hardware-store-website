@@ -1,5 +1,5 @@
 <?php
-include 'components/connect.php';
+require_once "components/connect.php";
 
 session_start();
 
@@ -9,35 +9,48 @@ if (isset($_SESSION['user_id'])) {
    $user_id = '';
 }
 
-if (isset($_GET['email']) && isset($_GET['verification_code'])) {
-   $email = $_GET['email'];
-   $verification_code = $_GET['verification_code'];
+if (isset($_POST['submit'])) {
+    // Process login form data
+    $email = $_POST['email'];
+    $email = filter_var($email, FILTER_SANITIZE_STRING);
+    $password = sha1($_POST['password']);
+    $password = filter_var($password, FILTER_SANITIZE_STRING);
 
-   $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ?");
-   $select_user->execute([$email]);
-   $row = $select_user->fetch(PDO::FETCH_ASSOC);
+    // Validate input
+    $errors = [];
 
-   if ($select_user->rowCount() > 0) {
-      if ($row['email_verified'] == 0 && $row['verification_code'] == $verification_code) {
-         $update_user = $conn->prepare("UPDATE `users` SET email_verified = 1 WHERE email = ?");
-         $update_user->execute([$email]);
+    if (empty($email)) {
+        $errors[] = "Email is required.";
+    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = "Invalid email format.";
+    }
 
-         $message = 'Your email has been verified successfully. You can now log in.';
-         $messageClass = 'success';
-      } elseif ($row['email_verified'] == 0) {
-         $message = 'Your email is not yet verified. Please check your email and click the verification link.';
-         $messageClass = 'error';
-      } else {
-         $message = 'Invalid verification link.';
-         $messageClass = 'error';
-      }
-   } else {
-      $message = 'Invalid verification link.';
-      $messageClass = 'error';
-   }
-} else {
-   $message = 'Invalid verification link.';
-   $messageClass = 'error';
+    if (empty($_POST['password'])) {
+        $errors[] = "Password is required.";
+    }
+
+    if (!empty($errors)) {
+        $_SESSION['errors'] = $errors;
+        header("Location: user_login.php"); // Redirect back to the login page
+        exit();
+    }
+
+    // Check if the user exists and is verified
+    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ? AND email_verified = 1");
+    $select_user->execute([$email, $password]);
+    $row = $select_user->fetch(PDO::FETCH_ASSOC);
+
+    if ($select_user->rowCount() > 0) {
+        // User found and verified, set the user_id in session and redirect to the home page or any other authenticated page
+        $_SESSION['user_id'] = $row['id'];
+        header("Location: home.php");
+        exit();
+    } else {
+        $message = 'Invalid email or password.';
+        $_SESSION['message'] = $message;
+        header("Location: user_login.php"); // Redirect back to the login page
+        exit();
+    }
 }
 ?>
 
@@ -88,10 +101,10 @@ if (isset($_GET['email']) && isset($_GET['verification_code'])) {
    <div class="form-container">
       <form action="" method="post">
          <h3>Welcome User!</h3>
+         <br>
          <div class="message <?php echo $messageClass; ?>">
             <?php echo $message; ?>
          </div>
-         <br>
          <div class="input-field">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" required>
