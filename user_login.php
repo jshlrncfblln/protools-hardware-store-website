@@ -9,6 +9,15 @@ if (isset($_SESSION['user_id'])) {
    $user_id = '';
 }
 
+$message = '';
+$messageClass = '';
+
+if (isset($_SESSION['message'])) {
+   $message = $_SESSION['message'];
+   unset($_SESSION['message']); // Clear the message from the session
+   $messageClass = 'success';
+}
+
 if (isset($_POST['submit'])) {
     // Process login form data
     $email = $_POST['email'];
@@ -62,6 +71,7 @@ if (isset($_POST['submit'])) {
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Login - ProTools</title>
 
+   <!-- icon logo -->
    <link rel="shortcut icon" type="x-icon" href="images/protools-logo.png" sizes="16x16 32x32 48x48">
 
    <!-- font awesome cdn link  -->
@@ -100,11 +110,10 @@ if (isset($_POST['submit'])) {
 <div class="container">
    <div class="form-container">
       <form action="" method="post">
-         <h3>Welcome User!</h3>
-         <br>
+         <h3>USER LOGIN</h3>
          <div class="message <?php echo $messageClass; ?>">
             <?php echo $message; ?>
-         </div>
+         </div><br>
          <div class="input-field">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" required>

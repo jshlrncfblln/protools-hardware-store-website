@@ -129,12 +129,7 @@ if (isset($_POST['submit'])) {
    <link rel="stylesheet" href="css/style.css">
    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
    <link rel="stylesheet" href="css/register-style.css">
-   <style>
-    .error{
-      color: red;
-      font-size: 12px;
-    }
-   </style>
+
   <script>
 		function openPopup() {
       document.getElementById("overlay").style.display = "block";
@@ -146,7 +141,8 @@ if (isset($_POST['submit'])) {
       document.getElementById("popup").style.display = "none";
     }
 	</script>
-     <style>
+  <!-- style for the loader -->
+  <style>
         /* CSS for full-page loader */
         html, body {
             height: 100%;
@@ -177,37 +173,40 @@ if (isset($_POST['submit'])) {
             height: auto;  /* Maintain aspect ratio */
         }
     </style>
+
+    <!-- script for loader -->
    <script>
         // JavaScript to fade out the loader and container after 5 seconds
-        window.addEventListener("load", function() {
-            var loaderContainer = document.getElementById("loaderContainer");
-            var loader = document.getElementById("loader");
+      window.addEventListener("load", function() {
+          var loaderContainer = document.getElementById("loaderContainer");
+          var loader = document.getElementById("loader");
             
-            setTimeout(function() {
-                loaderContainer.classList.add("hidden");
-                setTimeout(function() {
-                    loaderContainer.style.display = "none";
+          setTimeout(function() {
+            loaderContainer.classList.add("hidden");
+              setTimeout(function() {
+                  loaderContainer.style.display = "none";
                 }, 500);
             }, 2000);
         });
     </script>
 
-    <style>
-      .error {
-         color: red;
-         font-size: 12px;
-      }
+  <!-- style for the error message -->
+  <style>
+    .error {
+       color: red;
+       font-size: 12px;
+    }
 
-      .success {
-         color: green;
-         font-size: 12px;
-      }
+    .success {
+       color: green;
+       font-size: 12px;
+    }
 
-      .message-container {
-         text-align: center;
-         margin-top: 20px;
-      }
-    </style>
+    .message-container {
+       text-align: center;
+       margin-top: 20px;
+    }
+  </style>
 
 </head>
 <body>

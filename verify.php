@@ -42,15 +42,23 @@ if (isset($_GET['code'])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Email Verification</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verifying Account</title>
+
+    <!-- logo icon -->
+    <link rel="shortcut icon" type="x-icon" href="images/protools-logo.png" sizes="16x16 32x32 48x48">
+
+    <!-- style for loading animation -->
     <style>
-        /* CSS for full-page loader */
-        html, body {
+         html, body {
             height: 100%;
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }
         
         .loader-container {
@@ -72,14 +80,21 @@ if (isset($_GET['code'])) {
         }
 
         #loader {
-            width: 100px;  /* Set the desired width */
-            height: auto;  /* Maintain aspect ratio */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     </style>
+
 </head>
 <body>
-    <div class="loader-container" id="loader-container">
-        <img src="images/Hourglass.gif" alt="Loading Animation" id="loader">
-    </div>
+<!-- container for loader -->
+<div class="loader-container" id="loader-container">
+    <img src="images/Hourglass.gif" alt="Loading Animation" id="loader">
+</div>
+
 </body>
 </html>

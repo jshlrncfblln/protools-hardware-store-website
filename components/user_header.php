@@ -38,16 +38,12 @@
             $fetch_profile = $select_profile->fetch(PDO::FETCH_ASSOC);
          ?>
          <p><?= $fetch_profile["fname"]; ?></p>
-         <a href="update_user.php" class="btn">update profile</a>
-         <div class="flex-btn">
-            <a href="user_register.php" class="option-btn">register</a>
-            <a href="user_login.php" class="option-btn">login</a>
-         </div>
-         <a href="components/user_logout.php" class="delete-btn" onclick="return confirm('logout from the website?');">logout</a> 
+         <a href="update_user.php" class="btn">Update Profile</a>
+         <a href="components/user_logout.php" class="delete-btn" onclick="return confirm('Are you sure you want to logout?');">logout</a> 
          <?php
             }else{
          ?>
-         <p>please login or register first!</p>
+         <p>Login First!</p>
          <div class="flex-btn">
             <a href="user_register.php" class="option-btn">register</a>
             <a href="user_login.php" class="option-btn">login</a>
