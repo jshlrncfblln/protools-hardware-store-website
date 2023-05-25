@@ -372,7 +372,7 @@ function validateForm(){
 
 function validateFirstName() {
   const firstNameValue = fnameInput.value.trim();
-  const regex = /^[A-Za-z]+$/;
+  const regex = /^[A-Za-z\s-]+$/;
 
   if (firstNameValue === "") {
     fnameInput.classList.remove("error");
@@ -380,7 +380,7 @@ function validateFirstName() {
     return true;
   } else if (!regex.test(firstNameValue)) {
     fnameInput.classList.add("error");
-    fnameError.textContent = "First name must consist only of letters";
+    fnameError.textContent = "First name must consist only of letters, spaces, or dashes";
     return false;
   } else {
     fnameInput.classList.remove("error");
@@ -391,7 +391,7 @@ function validateFirstName() {
 
 function validateSurName() {
   const surnameValue = snameInput.value.trim();
-  const regex = /^[A-Za-z]+$/;
+  const regex = /^[A-Za-z\s-]+$/;
 
   if (surnameValue === "") {
     snameInput.classList.remove("error");
@@ -399,7 +399,7 @@ function validateSurName() {
     return true;
   } else if (!regex.test(surnameValue)) {
     snameInput.classList.add("error");
-    snameError.textContent = "Surname must consist only of letters";
+    snameError.textContent = "Surname must consist only of letters, spaces, or dashes";
     return false;
   } else {
     snameInput.classList.remove("error");
@@ -407,6 +407,7 @@ function validateSurName() {
     return true;
   }
 }
+
 
 function validateEmail() {
   const emailValue = emailInput.value.trim();
