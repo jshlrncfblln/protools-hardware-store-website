@@ -1,0 +1,78 @@
+.accounts {
+    padding: 20px;
+ }
+ 
+ .heading {
+    margin-top: 0;
+    font-size: 24px;
+    text-align: center;
+ }
+ 
+ .box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+ }
+ 
+ .box {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    text-align: center;
+ }
+ 
+ .box p {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+ }
+ 
+ .option-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-top: 10px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #f57c00;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+ }
+ 
+ .option-btn:hover {
+    background-color: #e66000;
+ }
+ 
+ .table-responsive {
+    overflow-x: auto;
+    margin-top: 20px;
+ }
+ 
+ .table {
+    width: 100%;
+    table-layout: fixed;
+    border-collapse: collapse;
+ }
+ 
+ .table th,
+ .table td {
+    padding: 6px;
+    border: 1px solid #ccc;
+    word-wrap: break-word;
+    font-size: 12px;
+ }
+ 
+ .table th {
+    background-color: #f0f0f0;
+    text-align: left;
+ }
+ .empty {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+ }
+ 

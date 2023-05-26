@@ -25,7 +25,7 @@ if(isset($_POST['submit'])){
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Admin - Login</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-   <link rel="stylesheet" href="../css/admin_style.css">
+   <link rel="stylesheet" href="../css/admin-login-style.css">
 </head>
 <body>
 <?php
@@ -40,13 +40,62 @@ if(isset($_POST['submit'])){
       }
    }
 ?>
-<section class="form-container">
-   <form action="" method="post">
-      <h3>login now</h3>
-      <input type="text" name="fname" required placeholder="enter your username" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="submit" value="login now" class="btn" name="submit">
-   </form>
-</section>
+
+<div class="container">
+   <div class="form-container">
+      <form action="" method="post">
+         <h3>Admin Login</h3>
+         <div class="input-field">
+            <label for="fname">First Name</label>
+            <input type="text" name="fname" id="fname" placeholder="First Name" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+         </div>
+
+         <div class="input-field">
+            <label for="pass">Password</label>
+            <div class="password-toggle">
+               <input type="password" name="pass" id="pass" placeholder="Password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+               <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
+            </div>
+         </div>
+
+         <div class="input-field">
+            <input type="submit" value="LOGIN" id="submit" name="submit" disabled>
+         </div>
+      </form>
+   </div>
+</div>
+
+<script>
+      function togglePasswordVisibility(icon) {
+         var passwordField = icon.previousElementSibling;
+         if (passwordField.type === 'password') {
+            passwordField.type = 'text';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+         } else {
+            passwordField.type = 'password';
+            icon.classList.add('fa-eye-slash');
+            icon.classList.remove('fa-eye');
+         }
+      }
+      
+      document.addEventListener("DOMContentLoaded", function() {
+         const emailField = document.getElementById("fname");
+         const passwordField = document.getElementById("pass");
+         const loginButton = document.getElementById("submit");
+
+         emailField.addEventListener("input", toggleLoginButton);
+         passwordField.addEventListener("input", toggleLoginButton);
+
+         function toggleLoginButton() {
+            if (emailField.value.trim() !== "" && passwordField.value.trim() !== "") {
+               loginButton.disabled = false;
+            } else {
+               loginButton.disabled = true;
+            }
+         }
+      });
+</script>
+
 </body>
 </html>

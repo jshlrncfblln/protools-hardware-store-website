@@ -1,0 +1,101 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+.register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.register-form-container {
+    width: 450px;
+    max-width: 100%;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+}
+
+.form-container h3 {
+    margin-top: 0;
+}
+
+.input-field {
+    margin-bottom: 20px;
+}
+
+.input-field label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-field input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-field input:focus {
+    outline: none;
+    border-color: #80bdff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.input-field input::placeholder {
+    color: #999;
+}
+
+.input-field input:disabled {
+    background-color: #eee;
+}
+
+.input-field input[type="submit"] {
+    background-color: #f57c00; /* Change the button color to #f57c00 */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+input[type="submit"]:disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+}
+
+.input-field input[type="submit"]:hover {
+    background-color: #e56b00; /* Change the hover color to a darker shade */
+}
+
+.password-toggle {
+    position: relative;
+  }
+  
+  .password-toggle i {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    cursor: pointer;
+    transform: translateY(-50%);
+    color: var(--dark);
+    font-size: 14px;
+  }
+  
+  .toggle-password:before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    content: "\f06e";
+  }
+  
+  .toggle-password.fa-eye:before {
+    content: "\f070";
+  }

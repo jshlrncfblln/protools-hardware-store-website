@@ -40,8 +40,6 @@
          <p><?= $fetch_profile['fname']; ?></p>
          <a href="../admin/update_profile.php" class="btn">update profile</a>
          <div class="flex-btn">
-            <a href="../admin/register_admin.php" class="option-btn">register</a>
-            <a href="../admin/admin_login.php" class="option-btn">login</a>
          </div>
          <a href="../components/admin_logout.php" class="delete-btn" onclick="return confirm('logout from the website?');">logout</a> 
       </div>

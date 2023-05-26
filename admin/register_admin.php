@@ -6,6 +6,8 @@ if(!isset($admin_id)){
    header('location:admin_login.php');
 }
 if(isset($_POST['submit'])){
+   $username = $_POST['username'];
+   $username = filter_var($username, FILTER_SANITIZE_STRING);
    $fname = $_POST['fname'];
    $fname = filter_var($fname, FILTER_SANITIZE_STRING);
    $sname = $_POST['sname'];
@@ -15,8 +17,8 @@ if(isset($_POST['submit'])){
    $cpass = sha1($_POST['cpass']);
    $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
 
-   $select_admin = $conn->prepare("SELECT * FROM `admins` WHERE fname = ?");
-   $select_admin->execute([$fname]);
+   $select_admin = $conn->prepare("SELECT * FROM `admins` WHERE username = ?");
+   $select_admin->execute([$username]);
 
    if($select_admin->rowCount() > 0){
       $message[] = 'username already exist!';
@@ -24,8 +26,8 @@ if(isset($_POST['submit'])){
       if($pass != $cpass){
          $message[] = 'confirm password not matched!';
       }else{
-         $insert_admin = $conn->prepare("INSERT INTO `admins`(fname, sname, password) VALUES(?,?,?)");
-         $insert_admin->execute([$fname, $sname, $cpass]);
+         $insert_admin = $conn->prepare("INSERT INTO `admins`(username, fname, sname, password) VALUES(?,?,?)");
+         $insert_admin->execute([$username, $fname, $sname, $cpass]);
          $message[] = 'new admin registered successfully!';
       }
    }
@@ -41,38 +43,99 @@ if(isset($_POST['submit'])){
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
+   <link rel="stylesheet" href="../css/admin-register-style.css">
    <link rel="stylesheet" href="../css/admin_style.css">
+
 
 </head>
 <body>
 
 <?php include '../components/admin_header.php'; ?>
 
-<section class="form-container">
+<div class="register-container">
+   <div class="register-form-container">
+      <form action="" method="post">
+         <h3>New Admin User</h3>
+         <div class="input-field">
+            <label for="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Username" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+         </div>
 
-   <form action="" method="post">
-      <h3>register new admin user</h3>
-      <input type="text" name="fname" required placeholder="What's your First Name?" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="text" name="sname" required placeholder="What's your Surname" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="pass" required placeholder="enter your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="password" name="cpass" required placeholder="confirm your password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
-      <input type="submit" value="register now" class="btn" name="submit">
-   </form>
+         <div class="input-field">
+            <label for="fname">First Name</label>
+            <input type="text" name="fname" id="fname" placeholder="First Name" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+         </div>
 
-</section>
+         <div class="input-field">
+            <label for="sname">Surname</label>
+            <input type="text" name="sname" id="sname" placeholder="Surname" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+         </div>
 
+         <div class="input-field">
+            <label for="pass">Password</label>
+            <div class="password-toggle">
+               <input type="password" name="pass" id="pass" placeholder="Password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+               <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
+            </div>
+         </div>
 
+         <div class="input-field">
+            <label for="cpass">Confirm Password</label>
+            <div class="password-toggle">
+               <input type="password" name="cpass" id="cpass" placeholder="Confirm Password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+               <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
+            </div>
+         </div>
 
-
-
-
-
-
-
+         <div class="input-field">
+            <input type="submit" value="REGISTER" id="submit" name="submit" disabled>
+         </div>
+      </form>
+   </div>
+</div>
 
 
 
 <script src="../js/admin_script.js"></script>
-   
+<script>
+   function togglePasswordVisibility(icon) {
+      var passwordField = icon.previousElementSibling;
+      if (passwordField.type === 'password') {
+         passwordField.type = 'text';
+         icon.classList.remove('fa-eye-slash');
+         icon.classList.add('fa-eye');
+      } else {
+         passwordField.type = 'password';
+         icon.classList.add('fa-eye-slash');
+         icon.classList.remove('fa-eye');
+      }
+   }
+
+   document.addEventListener("DOMContentLoaded", function() {
+      const usernameField = document.getElementById("username");
+      const fnameField = document.getElementById("fname");
+      const snameField = document.getElementById("surname");
+      const passwordField = document.getElementById("pass");
+      const cpasswordField = document.getElementById("cpass");
+      const loginButton = document.getElementById("submit");
+      const messageElement = document.querySelector(".message");
+
+      emailField.addEventListener("input", toggleLoginButton);
+      passwordField.addEventListener("input", toggleLoginButton);
+
+      function toggleLoginButton() {
+         if (emailField.value.trim() !== "" && passwordField.value.trim() !== "") {
+            loginButton.disabled = false;
+         } else {
+            loginButton.disabled = true;
+         }
+      }
+
+      // Hide the message after 3 seconds
+      setTimeout(function() {
+         messageElement.style.display = "none";
+      }, 3000);
+   });
+</script>
 </body>
 </html>

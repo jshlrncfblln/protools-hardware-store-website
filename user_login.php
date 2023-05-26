@@ -104,8 +104,60 @@ if (isset($_POST['submit'])) {
          color: red;
       }
    </style>
+
+      <!-- style for loader -->
+      <style>
+         html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+         }
+         
+         .loader-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ffffff;
+            z-index: 9999;
+            transition: opacity 0.5s;
+         }
+         
+         .hidden {
+            opacity: 0;
+         }
+
+         #loader {
+            width: 100px;  /* Set the desired width */
+            height: auto;  /* Maintain aspect ratio */
+         }
+   </style>
+
+   <!-- script for loader -->
+   <script>
+      window.addEventListener("load", function() {
+            var loaderContainer = document.getElementById("loaderContainer");
+            var loader = document.getElementById("loader");
+            
+            setTimeout(function() {
+                loaderContainer.classList.add("hidden");
+                setTimeout(function() {
+                    loaderContainer.style.display = "none";
+                }, 500);
+            }, 2000);
+        });
+    </script>
 </head>
 <body>
+
+<div class="loader-container" id="loaderContainer">
+  <img src="images/Hourglass.gif" alt="Loader" id="loader">
+</div>
+
 <div class="user-header">
    <?php include 'components/user_header.php'; ?>
 </div><br><br><br><br><br><br><br><br>

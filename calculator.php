@@ -72,7 +72,7 @@ if(isset($_SESSION['user_id'])){
                 }, 500);
             }, 2000);
         });
-   </script>
+    </script>
 
 </head>
 <body>
@@ -82,7 +82,7 @@ if(isset($_SESSION['user_id'])){
 </div>
    
 <?php include 'components/user_header.php'; ?>
-<br><br>
+<br><br><br><br><br><br><br><br><br>
       <div class="form-container">
         <form action="" method="post">
           <h3>Project Calculator</h3>
@@ -114,7 +114,7 @@ if(isset($_SESSION['user_id'])){
     </form>
   </div>
 </div>
-<br>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 <?php include 'components/footer.php'; ?>
 <script src="js/script.js"></script>
 <script>
