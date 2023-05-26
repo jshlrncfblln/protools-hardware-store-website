@@ -21,56 +21,55 @@ if(isset($_GET['delete'])){
    <title>ProTools - Admins</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
    <link rel="stylesheet" href="../css/admin-acc-style.css">
+   <link rel="stylesheet" href="../css/admin_style.css">
    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 </head>
 <body>
 <?php include '../components/admin_header.php'; ?>
-<section class="accounts">
-      <h1 class="heading">admin accounts</h1>
-      <div class="box-container">
-         <div class="table-responsive">
-            <table class="table">
-               <thead>
-                  <tr>
-                     <th>Admin ID</th>
-                     <th>Admin Name</th>
-                     <th>Actions</th>
-                  </tr>
-               </thead>
-               <tbody>
-                  <?php
-                  $select_accounts = $conn->prepare("SELECT * FROM `admins`");
-                  $select_accounts->execute();
-                  if ($select_accounts->rowCount() > 0) {
-                     while ($fetch_accounts = $select_accounts->fetch(PDO::FETCH_ASSOC)) {
-                  ?>
-                        <tr>
-                           <td><?= $fetch_accounts['id']; ?></td>
-                           <td><?= $fetch_accounts['fname']; ?></td>
-                           <td>
-                              <a href="admin_accounts.php?delete=<?= $fetch_accounts['id']; ?>" onclick="return confirm('delete this account?')" class="delete-btn">delete</a>
-                              <?php
-                              if ($fetch_accounts['id'] == $admin_id) {
-                                 echo '<a href="update_profile.php" class="option-btn">update</a>';
-                              }
-                              ?>
-                           </td>
-                        </tr>
-                  <?php
-                     }
-                  } else {
-                     echo '<tr><td colspan="3" class="empty">No accounts available!</td></tr>';
+<section class="admin-accounts">
+   <h1 class="heading">ADMIN ACCOUNTS</h1>
+   <div class="box-container">
+      <div class="table-responsive">
+         <table id="adminTable" class="table">
+            <thead>
+               <tr>
+                  <th>Admin ID</th>
+                  <th>Admin Name</th>
+                  <th>Actions</th>
+               </tr>
+            </thead>
+            <tbody>
+               <?php
+               $select_accounts = $conn->prepare("SELECT * FROM `admins`");
+               $select_accounts->execute();
+               if ($select_accounts->rowCount() > 0) {
+                  while ($fetch_accounts = $select_accounts->fetch(PDO::FETCH_ASSOC)) {
+                     $adminName = $fetch_accounts['fname'] . ' ' . $fetch_accounts['sname']; // Concatenate fname and sname
+               ?>
+                     <tr>
+                        <td><?= $fetch_accounts['id']; ?></td>
+                        <td><?= $adminName; ?></td>
+                        <td>
+                           <a href="admin_accounts.php?delete=<?= $fetch_accounts['id']; ?>" onclick="return confirm('ARE YOU SURE YOU WANT TO DELETE THIS ACCOUNT?')" class="delete-btn">DELETE</a>
+                           <?php
+                           if ($fetch_accounts['id'] == $admin_id) {
+                              echo '<a href="update_profile.php" class="option-btn">UPDATE</a>';
+                           }
+                           ?>
+                        </td>
+                     </tr>
+               <?php
                   }
-                  ?>
-               </tbody>
-            </table>
-         </div>
+               } else {
+                  echo '<tr><td colspan="3" class="empty">No accounts available!</td></tr>';
+               }
+               ?>
+            </tbody>
+         </table>
       </div>
-      <div class="box">
-            <p>Register New Admin User</p>
-            <a href="register_admin.php" class="option-btn">Register Here</a>
-         </div>
-   </section>
+   </div>
+</section>
+
 <script src="../js/admin_script.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>

@@ -483,33 +483,6 @@ section{
    border:var(--border);
 }
 
-.accounts .box-container{
-   display: grid;
-   grid-template-columns: repeat(auto-fit, 33rem);
-   gap:1.5rem;
-   align-items: flex-start;
-   justify-content: center;
-}
-
-.accounts .box-container .box{
-   padding:2rem;
-   padding-top: .5rem;
-   border-radius: .5rem;
-   text-align: center;
-   border:var(--border);
-   background-color: var(--white);
-   box-shadow: var(--box-shadow);
-}
-
-.accounts .box-container .box p{
-   font-size: 2rem;
-   color:var(--light-color);
-   margin: 1rem 0;
-}
-
-.accounts .box-container .box p span{
-   color:var(--main-color);
-}
 
 .contacts .box-container{
    display: grid;
