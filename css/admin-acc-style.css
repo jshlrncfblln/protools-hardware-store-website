@@ -1,78 +1,92 @@
 /* admin-acc-style.css */
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-.heading{
-    text-align: center;
+.admin-accounts {
+  padding: 20px;
 }
 
-/* Table Styling */
+.heading {
+  font-size: 30px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.box-container {
+  margin-top: 20px;
+}
+
 .table {
-    width: 800px; /* Adjust the width as needed */
-    margin: 0 auto;
-    border-collapse: collapse;
+  width: 100%;
+  max-width: 1000px; /* Adjust the max-width as desired */
+  border-collapse: collapse;
+  margin: 0 auto;
+  border-radius: 8px; /* Add border radius */
+  overflow: hidden; /* Hide the table overflow */
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Add box shadow */
+}
+
+.table th,
+.table td {
+  padding: 15px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Alternate row background color */
+}
+
+.table tr:hover {
+  background-color: #e9e9e9; /* Hover row background color */
+}
+
+.empty {
+  text-align: center;
+  font-style: italic;
+  color: #999;
+}
+
+.delete,
+.option {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete {
+  color: #fff;
+  background-color: #ff0000;
+  margin-right: 10px;
+}
+
+.option {
+  color: #fff;
+  background-color: #00aa00;
+}
+
+@media screen and (max-width: 600px) {
+  .table {
+      font-size: 14px;
   }
-  
-  .table thead th {
-    background-color: #f5f5f5;
-    font-weight: bold;
-    padding: 10px;
-    text-align: left;
-  }
-  
-  .table tbody td {
-    padding: 10px;
-  }
-  
-  .table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-  }
-  
-  .table tbody tr:hover {
-    background-color: #eaeaea;
-  }
-  
-  /* Button Styling */
- /* Button Styling */
-.delete-btn {
-    background-color: #f44336;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 5px 10px;
-    text-decoration: none;
-  }
-  
-  .delete-btn:hover {
-    background-color: #d32f2f;
-  }
-  
-  .option-btn {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    padding: 5px 10px;
-    text-decoration: none;
-  }
-  
-  .option-btn:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Empty Message Styling */
-  .empty {
-    text-align: center;
-    padding: 20px;
-    color: #999;
-  }
-  
-  
- 
+}

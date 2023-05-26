@@ -18,7 +18,7 @@ if(isset($_SESSION['user_id'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>About Us</title>
+   <title>ProTools - About Us</title>
    <link rel="shorcut icon" type="x-icon" href="images/protools-logo.png" sizes="16x16 32x32 48x48">
    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css" />
    
@@ -94,7 +94,16 @@ if(isset($_SESSION['user_id'])){
 
       <div class="content">
          <h3>Why choose us?</h3>
-         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam veritatis minus et similique doloribus? Harum molestias tenetur eaque illum quas? Obcaecati nulla in itaque modi magnam ipsa molestiae ullam consequuntur.</p>
+         <p>
+            1. Extensive Selection: Find everything you need for your projects under one roof.<br>
+            2. Quality Assurance: We offer reliable products from renowned brands.<br>
+            3. Expert Advice: Our knowledgeable staff provides expert guidance.<br>
+            4. Competitive Pricing: Get affordable options without compromising quality.<br>
+            5. Exceptional Service: Experience top-notch customer support.<br>
+            6. Convenient Shopping: Enjoy a hassle-free and organized shopping experience.<br>
+            7. Reliable Delivery: Timely delivery right to your doorstep.<br>
+            Choose us for a superior hardware store experience.
+         </p>
          <a href="contact.php" class="btn">contact us</a>
       </div>
 

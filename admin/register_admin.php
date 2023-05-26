@@ -26,7 +26,7 @@ if(isset($_POST['submit'])){
       if($pass != $cpass){
          $message[] = 'confirm password not matched!';
       }else{
-         $insert_admin = $conn->prepare("INSERT INTO `admins`(username, fname, sname, password) VALUES(?,?,?)");
+         $insert_admin = $conn->prepare("INSERT INTO `admins`(username, fname, sname, password) VALUES(?,?,?,?)");
          $insert_admin->execute([$username, $fname, $sname, $cpass]);
          $message[] = 'new admin registered successfully!';
       }
@@ -39,7 +39,7 @@ if(isset($_POST['submit'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>register admin</title>
+   <title>Register New Admin User</title>
 
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
 
@@ -55,26 +55,26 @@ if(isset($_POST['submit'])){
 <div class="register-container">
    <div class="register-form-container">
       <form action="" method="post">
-         <h3>New Admin User</h3>
+         <h3>New Admin User</h3><br>
          <div class="input-field">
             <label for="username">Username</label>
-            <input type="text" name="username" id="username" placeholder="Username" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+            <input type="text" name="username" id="username" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
          </div>
 
          <div class="input-field">
             <label for="fname">First Name</label>
-            <input type="text" name="fname" id="fname" placeholder="First Name" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+            <input type="text" name="fname" id="fname" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
          </div>
 
          <div class="input-field">
             <label for="sname">Surname</label>
-            <input type="text" name="sname" id="sname" placeholder="Surname" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+            <input type="text" name="sname" id="sname" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
          </div>
 
          <div class="input-field">
             <label for="pass">Password</label>
             <div class="password-toggle">
-               <input type="password" name="pass" id="pass" placeholder="Password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+               <input type="password" name="pass" id="pass" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
                <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
             </div>
          </div>
@@ -82,13 +82,13 @@ if(isset($_POST['submit'])){
          <div class="input-field">
             <label for="cpass">Confirm Password</label>
             <div class="password-toggle">
-               <input type="password" name="cpass" id="cpass" placeholder="Confirm Password" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
+               <input type="password" name="cpass" id="cpass" maxlength="20" oninput="this.value = this.value.replace(/\s/g, '')">
                <i class="far fa-eye-slash toggle-password" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
             </div>
          </div>
 
          <div class="input-field">
-            <input type="submit" value="REGISTER" id="submit" name="submit" disabled>
+            <input type="submit" value="REGISTER" id="submit" name="submit">
          </div>
       </form>
    </div>
@@ -106,36 +106,10 @@ if(isset($_POST['submit'])){
          icon.classList.add('fa-eye');
       } else {
          passwordField.type = 'password';
-         icon.classList.add('fa-eye-slash');
          icon.classList.remove('fa-eye');
       }
    }
 
-   document.addEventListener("DOMContentLoaded", function() {
-      const usernameField = document.getElementById("username");
-      const fnameField = document.getElementById("fname");
-      const snameField = document.getElementById("surname");
-      const passwordField = document.getElementById("pass");
-      const cpasswordField = document.getElementById("cpass");
-      const loginButton = document.getElementById("submit");
-      const messageElement = document.querySelector(".message");
-
-      emailField.addEventListener("input", toggleLoginButton);
-      passwordField.addEventListener("input", toggleLoginButton);
-
-      function toggleLoginButton() {
-         if (emailField.value.trim() !== "" && passwordField.value.trim() !== "") {
-            loginButton.disabled = false;
-         } else {
-            loginButton.disabled = true;
-         }
-      }
-
-      // Hide the message after 3 seconds
-      setTimeout(function() {
-         messageElement.style.display = "none";
-      }, 3000);
-   });
 </script>
 </body>
 </html>

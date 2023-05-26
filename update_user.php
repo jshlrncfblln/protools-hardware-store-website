@@ -10,6 +10,7 @@ if(isset($_SESSION['user_id'])){
    $user_id = '';
 };
 
+
 if(isset($_POST['submit'])){
 
    $fname = $_POST['fname'];
@@ -32,18 +33,18 @@ if(isset($_POST['submit'])){
    $cpass = filter_var($cpass, FILTER_SANITIZE_STRING);
 
    if($old_pass == $empty_pass){
-      $message[] = 'please enter old password!';
+      $message[] = 'PLEASE ENTER OLD PASSWORD!';
    }elseif($old_pass != $prev_pass){
-      $message[] = 'old password not matched!';
+      $message[] = 'OLD PASSWORD NOT MATCHED!';
    }elseif($new_pass != $cpass){
-      $message[] = 'confirm password not matched!';
+      $message[] = 'CONFIRM PASSWORD NOT MATCHED!';
    }else{
       if($new_pass != $empty_pass){
          $update_admin_pass = $conn->prepare("UPDATE `users` SET password = ? WHERE id = ?");
          $update_admin_pass->execute([$cpass, $user_id]);
-         $message[] = 'password updated successfully!';
+         $message[] = 'PASSWORD UPDATED SUCCESSFULLY!';
       }else{
-         $message[] = 'please enter a new password!';
+         $message[] = 'PLEASE ENTER NEW PASSWORD!';
       }
    }
    
@@ -65,6 +66,22 @@ if(isset($_POST['submit'])){
    <!-- custom css file link  -->
    <link rel="stylesheet" href="css/style.css">
 
+   <style>
+      .alert {
+         padding: 10px;
+         margin-bottom: 10px;
+         border-radius: 5px;
+         font-size: 14px;
+         font-weight: bold;
+      }
+
+      .alert.alert-danger {
+         color: red;
+         background-color: #ffe6e6;
+         border: 1px solid #ff8080;
+      }
+   </style>
+
 </head>
 <body>
    
@@ -74,9 +91,11 @@ if(isset($_POST['submit'])){
 
    <form action="" method="post">
       <h3>update now</h3>
-      <input type="hidden" name="prev_pass" value="<?= $fetch_profile["password"]; ?>">
+      <?php foreach ($message as $msg): ?>
+         <div class="alert alert-danger"><?= $msg ?></div>
+      <?php endforeach; ?>      <input type="hidden" name="prev_pass" value="<?= $fetch_profile["password"]; ?>">
       <input type="text" name="fname" required placeholder="First Name" maxlength="20"  class="box" value="<?= $fetch_profile["fname"]; ?>">
-      <input type="text" name="sname" required placeholder="Surname" maxlength="20"  class="box" value="<?= $fetch_profile["fname"]; ?>">
+      <input type="text" name="sname" required placeholder="Surname" maxlength="20"  class="box" value="<?= $fetch_profile["sname"]; ?>">
       <input type="email" name="email" required placeholder="Email Address" maxlength="50"  class="box" oninput="this.value = this.value.replace(/\s/g, '')" value="<?= $fetch_profile["email"]; ?>">
       <input type="password" name="old_pass" placeholder="Old Password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">
       <input type="password" name="new_pass" placeholder="New Password" maxlength="20"  class="box" oninput="this.value = this.value.replace(/\s/g, '')">

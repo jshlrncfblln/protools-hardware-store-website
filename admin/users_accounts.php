@@ -39,38 +39,55 @@ if(isset($_GET['delete'])){
 
    <link rel="stylesheet" href="../css/admin_style.css">
 
+   <link rel="stylesheet" href="../css/user-acc-style.css">
+
+
 </head>
 <body>
 
 <?php include '../components/admin_header.php'; ?>
-
 <section class="accounts">
-
-   <h1 class="heading">user accounts</h1>
-
-   <div class="box-container">
-
-   <?php
-      $select_accounts = $conn->prepare("SELECT * FROM `users`");
-      $select_accounts->execute();
-      if($select_accounts->rowCount() > 0){
-         while($fetch_accounts = $select_accounts->fetch(PDO::FETCH_ASSOC)){   
-   ?>
-   <div class="box">
-      <p>User ID : <span><?= $fetch_accounts['id']; ?></span> </p>
-      <p> User Name : <span><?= $fetch_accounts['fname']; ?> <?= $fetch_accounts['sname']; ?></span> </p>
-      <p> User Email : <span><?= $fetch_accounts['email']; ?></span> </p>
-      <a href="users_accounts.php?delete=<?= $fetch_accounts['id']; ?>" onclick="return confirm('delete this account? the user related information will also be delete!')" class="delete-btn">delete</a>
-   </div>
-   <?php
-         }
-      }else{
-         echo '<p class="empty">no accounts available!</p>';
-      }
-   ?>
-
-   </div>
-
+  <h1 class="heading">USER ACCOUNTS</h1>
+  <div class="box-container">
+    <div class="table-responsive">
+      <table id="userTable" class="table">
+        <thead>
+          <tr>
+            <th>User ID</th>
+            <th>First Name</th>
+            <th>Surname</th>
+            <th>User Email</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php
+          $select_accounts = $conn->prepare("SELECT * FROM `users`");
+          $select_accounts->execute();
+          if ($select_accounts->rowCount() > 0) {
+            while ($fetch_accounts = $select_accounts->fetch(PDO::FETCH_ASSOC)) {
+              $fullName = $fetch_accounts['fname'] . ' ' . $fetch_accounts['sname'];
+              $email = $fetch_accounts['email'];
+          ?>
+              <tr>
+                <td><?= $fetch_accounts['id']; ?></td>
+                <td><?= $fetch_accounts['fname']; ?></td>
+                <td><?= $fetch_accounts['sname']; ?></td>
+                <td><?= $email; ?></td>
+                <td>
+                  <a href="users_accounts.php?delete=<?= $fetch_accounts['id']; ?>" onclick="return confirm('Are you sure you want to delete this account? The user-related information will also be deleted!')" class="delete-btn">DELETE</a>
+                </td>
+              </tr>
+          <?php
+            }
+          } else {
+            echo '<tr><td colspan="5" class="empty">No accounts available!</td></tr>';
+          }
+          ?>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </section>
 
 

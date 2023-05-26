@@ -12,10 +12,10 @@ if(!isset($admin_id)){
 
 if(isset($_POST['submit'])){
 
-   $name = $_POST['name'];
+   $name = $_POST['fname'];
    $name = filter_var($name, FILTER_SANITIZE_STRING);
 
-   $update_profile_name = $conn->prepare("UPDATE `admins` SET name = ? WHERE id = ?");
+   $update_profile_name = $conn->prepare("UPDATE `admins` SET fname = ? WHERE id = ?");
    $update_profile_name->execute([$name, $admin_id]);
 
    $empty_pass = 'da39a3ee5e6b4b0d3255bfef95601890afd80709';

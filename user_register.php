@@ -87,7 +87,7 @@ if (isset($_POST['submit'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'joshua.laurence.fabi@gmail.com';
-            $mail->Password = 'xyxpolrgsslpvhub';
+            $mail->Password = 'mhvudscuslqjtfts';
             $mail->SMTPSecure = 'tls';
             $mail->Port = 587;
 

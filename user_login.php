@@ -4,27 +4,27 @@ require_once "components/connect.php";
 session_start();
 
 if (isset($_SESSION['user_id'])) {
-   $user_id = $_SESSION['user_id'];
+    $user_id = $_SESSION['user_id'];
 } else {
-   $user_id = '';
+    $user_id = '';
 }
 
 $message = '';
 $messageClass = '';
 
 if (isset($_SESSION['message'])) {
-   $message = $_SESSION['message'];
-   unset($_SESSION['message']); // Clear the message from the session
-   $messageClass = 'success';
+    $message = $_SESSION['message'];
+    unset($_SESSION['message']); // Clear the message from the session
+    $messageClass = 'success';
 } else {
-   $messageClass = ''; // Add this line to ensure empty message class if no message is present
+    $messageClass = ''; // Add this line to ensure empty message class if no message is present
 }
 
 if (isset($_POST['submit'])) {
     // Process login form data
     $email = $_POST['email'];
     $email = filter_var($email, FILTER_SANITIZE_STRING);
-    $password = sha1($_POST['password']);
+    $password = $_POST['password'];
     $password = filter_var($password, FILTER_SANITIZE_STRING);
 
     // Validate input
@@ -47,23 +47,32 @@ if (isset($_POST['submit'])) {
     }
 
     // Check if the user exists and is verified
-    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND password = ? AND email_verified = 1");
-    $select_user->execute([$email, $password]);
+    $select_user = $conn->prepare("SELECT * FROM `users` WHERE email = ? AND email_verified = 1");
+    $select_user->execute([$email]);
     $row = $select_user->fetch(PDO::FETCH_ASSOC);
 
     if ($select_user->rowCount() > 0) {
-        // User found and verified, set the user_id in session and redirect to the home page or any other authenticated page
-        $_SESSION['user_id'] = $row['id'];
-        header("Location: home.php");
-        exit();
+        // User found and verified, check the password
+        if (sha1($password) === $row['password']) {
+            // Password matched, set the user_id in session and redirect to the home page or any other authenticated page
+            $_SESSION['user_id'] = $row['id'];
+            header("Location: home.php");
+            exit();
+        } else {
+            $message = 'Invalid email or password.';
+        }
     } else {
         $message = 'Invalid email or password.';
-        $_SESSION['message'] = $message;
-        header("Location: user_login.php"); // Redirect back to the login page
-        exit();
     }
+
+    $_SESSION['message'] = $message;
+    header("Location: user_login.php"); // Redirect back to the login page
+    exit();
 }
 ?>
+
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -181,6 +190,12 @@ if (isset($_POST['submit'])) {
                <i class="far fa-eye-slash toggle-pssword" aria-hidden="true" onclick="togglePasswordVisibility(this)"></i>
             </div>
          </div>
+         <div class="input-field">
+            <div class="forgot-password">
+               <a href="forgot_pass.php">Forgot Password?</a>
+            </div>
+      </div>
+
          <div class="input-field">
             <input type="submit" value="LOGIN" id="submit" name="submit" disabled>
          </div>

@@ -1,0 +1,155 @@
+/* Modern Design Styling */
+
+* {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Add Product Section */
+  
+  .add-products {
+    padding: 20px;
+    background-color: #f2f2f2;
+  }
+  
+  .add-products .heading {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .add-products form {
+    margin-top: 20px;
+  }
+  
+  .add-products .flex {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .add-products .inputBox {
+    flex: 1 1 300px;
+  }
+  
+  .add-products .inputBox span {
+    font-weight: bold;
+  }
+  
+  .add-products .box {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+  
+  .add-products .btn {
+    display: block;
+    width: 200px;
+    padding: 10px;
+    background-color: #Ff8c00;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+
+  .add-products .btn:hover{
+    background-color: #f39c12;
+  }
+  
+  /* Show Products Section */
+  
+  .show-products {
+    padding: 20px;
+    background-color: #f2f2f2;
+  }
+  
+  .show-products .heading {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .show-products .box-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .show-products .box {
+    width: 300px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+  }
+  
+  .show-products .box img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  
+  .show-products .box .name {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .show-products .box .price {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+  
+  .show-products .box .details {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+  }
+  
+  .show-products .box .flex-btn {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .show-products .box .option-btn,
+  .show-products .box .delete-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .show-products .box .option-btn {
+    color: #fff;
+    background-color: #00aa00;
+  }
+  
+  .show-products .box .delete-btn {
+    color: #fff;
+    background-color: #ff0000;
+  }
+  
+  .show-products .empty {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+  }
+  

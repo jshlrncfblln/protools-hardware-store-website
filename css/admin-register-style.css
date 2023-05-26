@@ -1,82 +1,90 @@
 * {
     box-sizing: border-box;
-}
-
-body {
+  }
+  
+  body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
-}
-
-.register-container {
+  }
+  
+  .register-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-}
-
-.register-form-container {
+  }
+  
+  .register-form-container {
     width: 450px;
     max-width: 100%;
     padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #fff;
-}
-
-.form-container h3 {
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .register-form-container h3 {
     margin-top: 0;
-}
-
-.input-field {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .input-field {
     margin-bottom: 20px;
-}
-
-.input-field label {
+  }
+  
+  .input-field label {
     display: block;
     margin-bottom: 5px;
-}
-
-.input-field input {
+    font-weight: bold;
+    font-size: 15px;
+  }
+  
+  .input-field input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
-}
-
-.input-field input:focus {
+    transition: border-color 0.3s ease;
+  }
+  
+  .input-field input:focus {
     outline: none;
-    border-color: #80bdff;
+    border-color: #f57c00;
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-.input-field input::placeholder {
+  }
+  
+  .input-field input::placeholder {
     color: #999;
-}
-
-.input-field input:disabled {
-    background-color: #eee;
-}
-
-.input-field input[type="submit"] {
-    background-color: #f57c00; /* Change the button color to #f57c00 */
+  }
+  
+  .input-field input:disabled {
+    background-color: #f2f2f2;
+  }
+  
+  .input-field input[type="submit"] {
+    background-color: #f57c00;
     color: #fff;
     border: none;
     cursor: pointer;
-}
-
-input[type="submit"]:disabled {
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .input-field input[type="submit"]:disabled {
     background-color: #ccc;
     color: #666;
     cursor: not-allowed;
-}
-
-.input-field input[type="submit"]:hover {
-    background-color: #e56b00; /* Change the hover color to a darker shade */
-}
-
-.password-toggle {
+  }
+  
+  .input-field input[type="submit"]:hover {
+    background-color: #e56b00;
+  }
+  
+  .password-toggle {
     position: relative;
   }
   
@@ -86,16 +94,17 @@ input[type="submit"]:disabled {
     right: 10px;
     cursor: pointer;
     transform: translateY(-50%);
-    color: var(--dark);
-    font-size: 14px;
+    color: #555;
+    font-size: 16px;
+    transition: color 0.3s ease;
   }
   
-  .toggle-password:before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    content: "\f06e";
+  .password-toggle .fa-eye {
+    color: #999;
   }
   
-  .toggle-password.fa-eye:before {
-    content: "\f070";
+  .password-toggle .fa-eye:hover {
+    color: #007bff;
   }
+  
+  

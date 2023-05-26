@@ -41,6 +41,7 @@ if (isset($_GET['code'])) {
     exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -89,12 +90,19 @@ if (isset($_GET['code'])) {
         }
     </style>
 
+    <!-- script to hide loader after page is fully loaded -->
+    <script>
+        window.addEventListener('load', function () {
+            var loaderContainer = document.getElementById('loader-container');
+            loaderContainer.classList.add('hidden');
+        });
+    </script>
 </head>
 <body>
-<!-- container for loader -->
-<div class="loader-container" id="loader-container">
-    <img src="images/Hourglass.gif" alt="Loading Animation" id="loader">
-</div>
+    <!-- container for loader -->
+    <div class="loader-container" id="loader-container">
+        <img src="images/Hourglass.gif" alt="Loading Animation" id="loader">
+    </div>
 
 </body>
 </html>

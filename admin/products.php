@@ -72,6 +72,8 @@ if(isset($_GET['delete'])){
    <title>ProTools - Products</title>
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
    <link rel="stylesheet" href="../css/admin_style.css">
+   <link rel="stylesheet" href="../css/add-products.css">
+
 </head>
 <body>
 <?php include '../components/admin_header.php'; ?>
@@ -104,7 +106,7 @@ if(isset($_GET['delete'])){
             <input type="file" name="image_03" accept="image/jpg, image/jpeg, image/png, image/webp" class="box" required>
         </div>
       </div>
-      <input type="submit" value="add product" class="btn" name="add_product">
+      <input type="submit" value="ADD PRODUCT" class="btn" name="add_product">
    </form>
 </section>
 <section class="show-products">

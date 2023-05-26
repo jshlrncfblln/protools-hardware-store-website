@@ -18,10 +18,9 @@ if(isset($_GET['delete'])){
    <meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>ProTools - Admins</title>
-   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-   <link rel="stylesheet" href="../css/admin-acc-style.css">
+   <title>ProTools - Admin Accounts</title>
    <link rel="stylesheet" href="../css/admin_style.css">
+   <link rel="stylesheet" href="../css/admin-acc-style.css">
    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
 </head>
 <body>
@@ -50,10 +49,10 @@ if(isset($_GET['delete'])){
                         <td><?= $fetch_accounts['id']; ?></td>
                         <td><?= $adminName; ?></td>
                         <td>
-                           <a href="admin_accounts.php?delete=<?= $fetch_accounts['id']; ?>" onclick="return confirm('ARE YOU SURE YOU WANT TO DELETE THIS ACCOUNT?')" class="delete-btn">DELETE</a>
+                           <a href="admin_accounts.php?delete=<?= $fetch_accounts['id']; ?>" onclick="return confirm('ARE YOU SURE YOU WANT TO DELETE THIS ACCOUNT?')" class="delete">DELETE</a>
                            <?php
                            if ($fetch_accounts['id'] == $admin_id) {
-                              echo '<a href="update_profile.php" class="option-btn">UPDATE</a>';
+                              echo '<a href="update_profile.php" class="option">UPDATE</a>';
                            }
                            ?>
                         </td>
