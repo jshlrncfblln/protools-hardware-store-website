@@ -16,6 +16,8 @@ if (isset($_SESSION['message'])) {
    $message = $_SESSION['message'];
    unset($_SESSION['message']); // Clear the message from the session
    $messageClass = 'success';
+} else {
+   $messageClass = ''; // Add this line to ensure empty message class if no message is present
 }
 
 if (isset($_POST['submit'])) {
@@ -95,7 +97,7 @@ if (isset($_POST['submit'])) {
       }
 
       .message.success {
-         color: green;
+         color: red;
       }
 
       .message.error {
@@ -106,14 +108,16 @@ if (isset($_POST['submit'])) {
 <body>
 <div class="user-header">
    <?php include 'components/user_header.php'; ?>
-</div>
+</div><br><br><br><br><br><br><br><br>
 <div class="container">
    <div class="form-container">
       <form action="" method="post">
          <h3>USER LOGIN</h3>
+         <?php if (!empty($message)) : ?> <!-- Add this line to check if the message is not empty -->
          <div class="message <?php echo $messageClass; ?>">
             <?php echo $message; ?>
          </div><br>
+         <?php endif; ?>
          <div class="input-field">
             <label for="email">Email Address</label>
             <input type="email" name="email" id="email" required>
@@ -133,7 +137,7 @@ if (isset($_POST['submit'])) {
          </div>
       </form>
    </div>
-</div>
+</div><br><br><br><br><br><br><br><br><br><br>
 <div class="footer">
    <?php include 'components/footer.php'; ?>
 </div>
